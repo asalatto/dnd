@@ -43,6 +43,11 @@ const blank_character = {
 
 export default function App() {
 
+    // Clears character stored in state/local storage
+    function clearCharacter() {
+        setCharacter(blank_character);
+    }
+
     // Updates field in character state
     function updateCharacter(event) {
         const updatedField = {};
@@ -104,7 +109,10 @@ export default function App() {
             <article className="page">
 
                 <div className="flex space-between">
-                    <h1>Character{character.character_name ? `: ${character.character_name}` : ''}</h1>
+                    <div className="flex">
+                        <h1 style={{display: 'inline-block'}}>Character{character.character_name ? `: ${character.character_name}` : ''}</h1>
+                        <button className="clear-button" onClick={clearCharacter}>Clear</button>
+                    </div>
                     <div>
                         <label htmlFor="theme">Theme: </label>
                         <input type="text" id="theme" onChange={updateCharacter} value={character.theme} />
