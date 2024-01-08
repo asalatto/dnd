@@ -1,0 +1,16 @@
+.text-input {
+    display: inline-block;
+    width: 25%;
+    border-radius: 2px;
+    padding: 10px;
+}
+
+.text-input label {
+    display: block;
+    margin-bottom: 2px;
+    font-size: 85%;
+}
+
+.text-input input {
+    width: 100%;
+}

@@ -1,0 +1,70 @@
+.ability {
+    display: inline-block;
+    vertical-align: top;
+    width: calc(16.667% - 10px);
+    margin: 5px;
+}
+
+.ability-block {
+    background-color: #efefef;
+    text-align: center;
+    padding: 10px;
+}
+
+.ability .text-input {
+    display: inline-block;
+    width: calc(100% - 35px);
+    margin: 0 5px 0 0;
+    padding: 0;
+}
+
+.ability .text-input input {
+    display: inline-block;
+    width: 100%;
+}
+
+.ability .text-input label {
+    text-align: left;
+    font-weight: bold;
+}
+
+.modifier {
+    display: inline-flex;
+    align-items: center;
+    justify-content:center;
+    width: 30px;
+    height: 30px;
+    border-radius: 25px;
+    background-color: #ddd;
+    margin: 5px auto 0;
+    font-weight: bold;
+    line-height: 0;
+    font-size: 90%;
+}
+
+.modifier[data-mod^='+'] {
+    background-color: rgba(0, 170, 61, 0.25);
+}
+
+.modifier[data-mod^='-'] {
+    background-color: rgba(232, 0, 41, 0.25);
+}
+
+.saving-throw {
+    display: flex;
+    margin-top: 0.5em;
+    font-size: 90%;
+}
+
+.skills {
+    list-style: none;
+    margin: 5px 0 0;
+    padding: 5px;
+    font-size: 90%;
+}
+
+.skills li {
+    display: flex;
+    align-items: center;
+    padding: 3px 0;
+}
