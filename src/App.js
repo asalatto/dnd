@@ -108,6 +108,7 @@ export default function App() {
                     <div>
                         <label htmlFor="theme">Theme: </label>
                         <input type="text" id="theme" onChange={updateCharacter} value={character.theme} />
+                        <span className="form-hint" style={{textAlign: 'right'}}>Hint: enter <a href="https://www.w3.org/wiki/CSS/Properties/color/keywords" target="_blank">valid CSS color value</a>. Or "pink"</span>
                     </div>
                 </div>
                 <section className="sheet-section">
@@ -170,5 +171,5 @@ export default function App() {
             </article>
         </main>
     )
-    
+
 }
