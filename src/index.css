@@ -18,3 +18,9 @@ input[type="text"], select {
 input[type="checkbox"], input[type="radio"] {
     margin-right: 5px;
 }
+
+h1 small, h2 small, h3 small {
+    font-size: 0.825rem;
+    font-weight: normal;
+    opacity: 0.75;
+}

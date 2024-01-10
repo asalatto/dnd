@@ -30,6 +30,7 @@
 
 .modifier {
     display: inline-flex;
+    vertical-align: bottom;
     align-items: center;
     justify-content:center;
     width: 30px;

@@ -137,7 +137,7 @@ export default function App() {
                     <Input name="hit_dice_total" onChange={updateCharacter} value={character.hit_dice_total} />
                 </section>
 
-                <h2>Abilities & Skills</h2>
+                <h2>Abilities & Skills <small>Modifiers appear when you enter ability scores. Check off proficiencies.</small></h2>
                 <section className="sheet-section">
                     <AbilityArray 
                         character={character} 

@@ -14,15 +14,15 @@ export default function Ability({
     updateSavingThrow
 }) {
     const modifier = calculateModifier(value);
-    const modifierDisplay = getModifierDisplay(modifier);
+    const modifierDisplay = value ? getModifierDisplay(modifier) : null;
     const savingThrow = saving_throws.includes(name) ? + (getProficiencyBonus(level) + modifier) : modifier;
-    const savingThrowDisplay = getModifierDisplay(savingThrow);
+    const savingThrowDisplay = value ? `(${getModifierDisplay(savingThrow)})` : null;
 
     return (
         <div className="ability">
             <div className="ability-block">
                 <Input name={name} label={titleize(name)} value={value} onChange={updateCharacter} />
-                <div className="modifier" data-mod={modifierDisplay}>{modifierDisplay}</div>
+                <div className="modifier" data-mod={modifierDisplay ?? 0}>{modifierDisplay}</div>
                 <label className="saving-throw">
                     <input 
                         type="checkbox"
@@ -30,14 +30,14 @@ export default function Ability({
                         onChange={updateSavingThrow}
                         checked={saving_throws.includes(name)}
                     /> 
-                    saving throw ({savingThrowDisplay})
+                    saving throw {savingThrowDisplay}
                 </label>
             </div>
 
             <ul className="skills">
                 {skills.map(skill => {
                     const bonus = proficiencies.includes(skill) ? + (getProficiencyBonus(level) + modifier) : modifier;
-                    const bonusDisplay = getModifierDisplay(bonus);
+                    const bonusDisplay = value ? `(${getModifierDisplay(bonus)})` : null;
 
                     return (
                         <li key={skill}>
@@ -49,7 +49,7 @@ export default function Ability({
                             /> 
                             <label htmlFor={skill}>
                                 { titleize(skill) }
-                                <span> ({bonusDisplay})</span>
+                                <span> {bonusDisplay}</span>
                             </label>
                         </li>
                     )
