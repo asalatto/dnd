@@ -1,0 +1,41 @@
+.tooltip {
+    position: relative;
+    display: inline-block;
+}
+
+.tooltip:hover .tooltip-message {
+    display: block;
+}
+
+.tooltip:hover .tooltip-icon {
+    background-color: dodgerblue;
+    color: #fff;
+}
+
+.tooltip-icon {
+    display: inline-block;
+    width: 15px;
+    height: 15px;
+    margin: 0 4px;
+    padding-top: 1px;
+    border-radius: 15px;
+    background-color: #fff;
+    color: dodgerblue;
+    font-weight: bold;
+    font-size: 12px;
+    text-align: center;
+}
+
+.tooltip-message {
+    display: none;
+    position: absolute;
+    left: 100%;
+    top: 0;
+    min-width: 150px;
+    padding: 4px;
+    border-radius: 2px;
+    border: 1px solid #bbb;
+    background-color: #fff;
+    box-shadow: 0 0 3px rgba(0,0,0,0.15);
+    font-size: 93%;
+}

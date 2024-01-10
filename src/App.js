@@ -164,15 +164,18 @@ export default function App() {
                 <section className="sheet-section">
                     <div className="flex">
                         <div>
-                            <label htmlFor="spellcasting_ability">Spellcasting Ability:</label>
+                            <label htmlFor="spellcasting_ability">
+                                Spellcasting Ability:
+                            </label>
                             <select id="spellcasting_ability" onChange={updateCharacter} value={character.spellcasting_ability}>
+                                <option value="" default disabled>Select ability</option>
                                 <option value="charisma">Charisma</option>
                                 <option value="intelligence">Intelligence</option>
                                 <option value="wisdom">Wisdom</option>
                             </select>
                         </div>
-                        <Input name="spell_save_DC" value={spellSaveDC} readOnly={true} />
-                        <Input name="spell_attack_bonus" value={spellAttackBonus} readOnly={true} />
+                        <Input name="spell_save_DC" value={spellSaveDC} tooltip="8 + spellcasting ability modifier + proficiency bonus" readOnly={true} />
+                        <Input name="spell_attack_bonus" value={spellAttackBonus} tooltip="spellcasting ability modifier + proficiency bonus" readOnly={true} />
                     </div>
                 </section>
 
