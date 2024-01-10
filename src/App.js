@@ -163,9 +163,9 @@ export default function App() {
                 <h2>Spells & Cantrips</h2>
                 <section className="sheet-section">
                     <div className="flex">
-                        <div>
+                        <div className="text-input">
                             <label htmlFor="spellcasting_ability">
-                                Spellcasting Ability:
+                                Spellcasting Ability
                             </label>
                             <select id="spellcasting_ability" onChange={updateCharacter} value={character.spellcasting_ability}>
                                 <option value="" default disabled>Select ability</option>

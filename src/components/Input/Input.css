@@ -1,7 +1,6 @@
 .text-input {
     display: inline-block;
     width: 25%;
-    border-radius: 2px;
     padding: 10px;
 }
 
@@ -11,6 +10,6 @@
     font-size: 85%;
 }
 
-.text-input input {
+.text-input input, .text-input select {
     width: 100%;
 }
