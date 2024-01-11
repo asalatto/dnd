@@ -8,12 +8,16 @@ body {
     font-family: sans-serif;
 }
 
-input[type="text"], select {
+input[type="text"], select, textarea {
     padding: 5px;
     border-radius: 2px;
     border: 1px solid #aaa;
     font-size: 110%;
     line-height: 1.25;
+}
+
+input[type="text"][readonly] {
+    background-color: transparent;
 }
 
 input[type="checkbox"], input[type="radio"] {

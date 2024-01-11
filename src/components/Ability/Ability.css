@@ -6,6 +6,8 @@
 }
 
 .ability-block {
+    border: 1px solid #ccc;
+    border-radius: 1px;
     background-color: #efefef;
     text-align: center;
     padding: 10px;

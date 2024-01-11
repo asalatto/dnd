@@ -4,8 +4,6 @@
 }
 
 .page-wrapper a {
-    color: pink;
-    font-weight: bold;
     text-decoration: none;
 }
 
@@ -58,4 +56,66 @@
     display: inline-block;
     margin-left: 10px;
     font-size: 90%;
+}
+
+.button {
+    display: inline-block;
+    margin: 4px;
+    padding: 1px 3px;
+    border-radius: 2px;
+    border: 1px solid dodgerblue;
+    font-size: 80%;
+    color: dodgerblue;
+}
+.button:hover, .button--feature:hover {
+    background-color: dodgerblue;
+    color: #fff;
+    text-decoration: none!important;
+    cursor: pointer;
+}
+.button.red {
+    border-color: #D83737;
+    color: #D83737;
+}
+.button.red:hover {
+    background-color: #D83737;
+    color: #fff;
+}
+.button--feature {
+    display: inline-block;
+    padding: 0.5em 1em;
+    background-color: #fff;
+    border-radius: 25px;
+    color: dodgerblue;
+}
+.button--feature svg {
+    height: 1.1em;
+    margin-bottom: -0.15em;
+    margin-right: 0.35em;
+    fill: dodgerblue;
+}
+.button--feature:hover svg {
+    fill: #fff;
+}
+
+
+.error {
+    color: #D83737;
+}
+
+.spells-list-container {
+    display: flex;
+    align-items: flex-start;
+    flex-wrap: wrap;
+}
+
+.new-spell-form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 0.5em;
+}
+
+.new-spell-form > * {
+    margin: 4px;
 }

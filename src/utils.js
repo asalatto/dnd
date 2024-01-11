@@ -35,3 +35,23 @@ export function getProficiencyBonus(level) {
 
     return bonus;
 }
+
+export function d(num = 20) {
+    return Math.floor(Math.random() * num + 1);
+}
+
+export function roll(times, die) {
+    let total = 0;
+    for (let i = 0; i < times; i++) {
+        total += d(die);
+    }
+    return total;
+}
+
+export function rollArray(times, die) {
+    let array = [];
+    for (let i = 0; i < times; i++) {
+        array.push(d(die));
+    }
+    return array;
+}
