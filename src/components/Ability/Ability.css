@@ -1,8 +1,8 @@
 .ability {
     display: inline-block;
     vertical-align: top;
-    width: calc(16.667% - 10px);
-    margin: 5px;
+    width: calc(16.667% - 8px);
+    margin: 4px;
 }
 
 .ability-block {

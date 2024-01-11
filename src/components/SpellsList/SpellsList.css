@@ -14,8 +14,8 @@
 }
 
 .spells-list li {
+    margin: 4px 0;
     padding: 10px;
-    border-bottom: 1px solid #bbb;
 }
 
 .spell-description {

@@ -9,11 +9,11 @@ export default function SpellsList({level="", spells=[], removeSpell}) {
         return (
             <div className="spells-list">
                 <h4>{title}</h4>
-                <ul className="sheet-section">
+                <ul>
                     {
                         spells.map(spell => {
                             return (
-                                <li key={spell.name} data-spell-name={spell.name}>
+                                <li key={spell.name} className="sheet-section" data-spell-name={spell.name}>
                                     <strong>{spell.name} </strong> 
                                     {/* <a className="button">edit</a> */}
                                     <a className="button red" onClick={removeSpell}>remove</a>

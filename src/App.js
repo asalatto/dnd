@@ -255,7 +255,7 @@ export default function App() {
                     { 
                         spellLevels.map(lvl => {
                             const spells = character.spells.filter(spell => spell.level == lvl);
-                            return <SpellsList key={lvl} level={lvl} spells={spells} removeSpell={removeSpell} />;
+                            return <SpellsList key={lvl} level={lvl} spells={spells} removeSpell={removeSpell} />
                         }) 
                     }
                 </div>
