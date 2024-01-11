@@ -39,8 +39,6 @@ const blank_character = {
     "spells": [],
 }
 
-const spellLevels = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-
 
 export default function App() {
 
@@ -150,6 +148,7 @@ export default function App() {
         }));
     }
 
+
     const [character, setCharacter] = React.useState(() => getLocalData('character', blank_character));
     const proficiencyBonus = getProficiencyBonus(character.level);
     const spellSaveDC = (8 + calculateModifier(character[character.spellcasting_ability]) + proficiencyBonus);
@@ -231,29 +230,24 @@ export default function App() {
                 </section>
 
                 <form className="new-spell-form" onSubmit={saveSpell}>
-                        <label>Add New Spell: </label>
-                        <select name="level">
-                            <option value="" default disabled>Spell level</option>
-                            <option value="0">Cantrip</option>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                            <option value="6">6</option>
-                            <option value="7">7</option>
-                            <option value="8">8</option>
-                            <option value="9">9</option>
-                        </select>
-                        <input type="text" name="name" placeholder="Spell name" />
-                        <textarea name="description" rows="1" cols="40" placeholder="Effects &amp; details" ></textarea>
-                        <input type="submit" value="Save Spell" />
-                        <div className="error"></div>
-                    </form>
+                    <label>Add New Spell: </label>
+                    <select name="level">
+                        <option value="" default disabled>Spell level</option>
+                        {
+                            Array.from(Array(10).keys()).map(lvl => {
+                                return <option key={lvl} value={lvl}>{lvl == 0 ? `Cantrip` : lvl}</option>
+                            })
+                        }
+                    </select>
+                    <input type="text" name="name" placeholder="Spell name" />
+                    <textarea name="description" rows="1" cols="40" placeholder="Effects &amp; details" ></textarea>
+                    <input type="submit" value="Save Spell" />
+                    <div className="error"></div>
+                </form>
 
                 <div className="spells-list-container">
-                    { 
-                        spellLevels.map(lvl => {
+                    {
+                        Array.from(Array(10).keys()).map(lvl => {
                             const spells = character.spells.filter(spell => spell.level == lvl);
                             return <SpellsList key={lvl} level={lvl} spells={spells} removeSpell={removeSpell} />
                         }) 
