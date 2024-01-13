@@ -1,4 +1,4 @@
-.page-wrapper {
+.page-wrapper, .main-footer {
     padding: 50px 0;
     background-color: #666; /* 😈 */
 }
@@ -118,4 +118,19 @@
 
 .new-spell-form > * {
     margin: 4px;
+}
+
+.new-spell-form .text-input label {
+    display: none;
+}
+
+.main-footer {
+    text-align: center;
+    font-size: 80%;
+    color: rgba(255,255,255,0.5);
+}
+
+.main-footer a {
+    opacity: 0.75;
+    font-weight: bold;
 }

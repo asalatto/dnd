@@ -10,6 +10,10 @@ export function getLocalData(key, defaultData) {
     return defaultData;
 }
 
+export async function getApiData(endpoint) {
+    return fetch(`https://www.dnd5eapi.co/api/${endpoint}`).then((response) => response.json())
+}
+
 export function calculateModifier(number) {
     const modifier = isNaN(number) ? 0 : Math.floor((number - 10) / 2);
     return modifier;

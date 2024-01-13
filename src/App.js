@@ -1,7 +1,8 @@
 import * as React from 'react'
 import './App.css';
-import { getLocalData, calculateModifier, getModifierDisplay, getProficiencyBonus, roll, rollArray } from './utils';
+import { getLocalData, getApiData, calculateModifier, getModifierDisplay, getProficiencyBonus, rollArray } from './utils';
 import Input from './components/Input/Input';
+import Search from './components/Search/Search';
 import AbilityArray from './components/AbilityArray/AbilityArray';
 import SpellsList from './components/SpellsList/SpellsList';
 
@@ -50,7 +51,8 @@ export default function App() {
     // Updates field in character state
     function updateCharacter(event) {
         const updatedField = {};
-        updatedField[event.target.id] = event.target.value;
+        const val = event.target.value || event.target.innerText.trim();
+        updatedField[event.target.id] = val;
         setCharacter(character => ({
             ...character,
             ...updatedField
@@ -148,6 +150,20 @@ export default function App() {
         }));
     }
 
+    async function addSpellFromApi(event) {
+        const spellIndex = event.target.getAttribute('data-index');        
+        if (!spellIndex) {
+            return;
+        }
+
+        const newSpellForm = document.querySelector('.new-spell-form');
+        const spellData = await getApiData(`spells/${spellIndex}`);
+        const spellDescription = `(Range: ${spellData.range}) ${spellData.desc} ${spellData.higher_level ?? ''}`;
+
+        newSpellForm.querySelector('select[name="level"]').value = spellData.level;
+        newSpellForm.querySelector('textarea[name="description"]').value = spellDescription;
+    }
+
 
     const [character, setCharacter] = React.useState(() => getLocalData('character', blank_character));
     const proficiencyBonus = getProficiencyBonus(character.level);
@@ -161,7 +177,7 @@ export default function App() {
     }, [character]);
 
 
-    return (
+    return (<>
         <main className="page-wrapper" style={{ backgroundColor: character.theme }}>
             <article className="page">
 
@@ -239,7 +255,7 @@ export default function App() {
                             })
                         }
                     </select>
-                    <input type="text" name="name" placeholder="Spell name" />
+                    <Search name="name" endpoint="spells" value={character.class} updateFunction={addSpellFromApi} placeholder="Spell name" />
                     <textarea name="description" rows="1" cols="40" placeholder="Effects &amp; details" ></textarea>
                     <input type="submit" value="Save Spell" />
                     <div className="error"></div>
@@ -256,6 +272,12 @@ export default function App() {
 
             </article>
         </main>
-    )
 
+        <footer className="main-footer">
+            <p>
+                Typeahead data provided by <a href="https://www.dnd5eapi.co/" target="_blank" style={{ color: 'pink' }}>DnD 5e API</a>.
+            </p>
+        </footer>
+    </>)
+    
 }
