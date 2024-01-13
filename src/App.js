@@ -204,7 +204,7 @@ export default function App() {
                 </section>
                 <br/>
                 <section className="sheet-section">
-                    <Input name="armor_class" onChange={updateCharacter} value={character.armor_class} />
+                    <Input name="armor_class" onChange={updateCharacter} value={character.armor_class} tooltip="Base is 10 + dexterity modifier" />
                     <Input name="hit_point_maximum" onChange={updateCharacter} value={character.hit_point_maximum} />
                     <Input name="hit_dice" onChange={updateCharacter} value={character.hit_dice} />
                     <Input name="hit_dice_total" onChange={updateCharacter} value={character.hit_dice_total} />
