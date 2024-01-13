@@ -1,7 +1,6 @@
 import * as React from 'react'
 import './SpellsList.css';
 import ExpandBox from '../ExpandBox/ExpandBox';
-import { truncate } from '../../utils';
 
 export default function SpellsList({level="", spells=[], removeSpell}) {
     const title = level == 0 ? 'Cantrips' : `Level ${level} Spells`;
