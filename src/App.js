@@ -255,7 +255,7 @@ export default function App() {
                             })
                         }
                     </select>
-                    <Search name="name" endpoint="spells" value={character.class} updateFunction={addSpellFromApi} placeholder="Spell name" />
+                    <Search name="name" endpoint="spells" updateFunction={addSpellFromApi} placeholder="Spell name" />
                     <textarea name="description" rows="1" cols="40" placeholder="Effects &amp; details" ></textarea>
                     <input type="submit" value="Save Spell" />
                     <div className="error"></div>
@@ -273,11 +273,11 @@ export default function App() {
             </article>
         </main>
 
-        <footer className="main-footer">
+        <footer className="main-footer" style={{ backgroundColor: character.theme }}>
             <p>
                 Typeahead data provided by <a href="https://www.dnd5eapi.co/" target="_blank" style={{ color: 'pink' }}>DnD 5e API</a>.
             </p>
         </footer>
     </>)
-    
+
 }

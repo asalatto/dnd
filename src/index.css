@@ -29,3 +29,7 @@ h1 small, h2 small, h3 small {
     font-weight: normal;
     opacity: 0.75;
 }
+
+a {
+    cursor: pointer;
+}

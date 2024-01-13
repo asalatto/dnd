@@ -19,5 +19,8 @@
 }
 
 .spell-description {
+    display: block;
+    max-height: 50px;
+    overflow: auto;
     font-size: 90%;
 }

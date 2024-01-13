@@ -3,6 +3,11 @@ export function titleize(string) {
     return capitalized.join(' ');
 }
 
+export function truncate(string, length) {
+    const truncated = (string.length > length) ? string.slice(0, length-1): string;
+    return truncated;
+}
+
 export function getLocalData(key, defaultData) {
     if (window.localStorage.getItem(key)) {
         return JSON.parse(window.localStorage.getItem(key))
