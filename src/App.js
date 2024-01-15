@@ -1,4 +1,4 @@
-import './App.css';
+import './App.scss';
 import * as React from 'react'
 import Input from './components/Input/Input';
 import Ability from './components/Ability/Ability';

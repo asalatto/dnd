@@ -1,4 +1,4 @@
-import './Search.css';
+import './Search.scss';
 import { useState, useEffect } from 'react';
 import Input from '../Input/Input';
 import { getApiData } from '../../utils';

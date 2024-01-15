@@ -3,6 +3,20 @@
     vertical-align: top;
     width: calc(16.667% - 8px);
     margin: 4px;
+    .text-input {
+        display: inline-block;
+        width: calc(100% - 35px);
+        margin: 0 5px 0 0;
+        padding: 0;
+        label {
+            text-align: left;
+            font-weight: bold;
+        }
+        input {
+            display: inline-block;
+            width: 100%;
+        }
+    }
 }
 
 .ability-block {
@@ -11,23 +25,6 @@
     background-color: #efefef;
     text-align: center;
     padding: 10px;
-}
-
-.ability .text-input {
-    display: inline-block;
-    width: calc(100% - 35px);
-    margin: 0 5px 0 0;
-    padding: 0;
-}
-
-.ability .text-input input {
-    display: inline-block;
-    width: 100%;
-}
-
-.ability .text-input label {
-    text-align: left;
-    font-weight: bold;
 }
 
 .modifier {
@@ -43,14 +40,12 @@
     font-weight: bold;
     line-height: 0;
     font-size: 90%;
-}
-
-.modifier[data-mod^='+'] {
-    background-color: rgba(0, 170, 61, 0.25);
-}
-
-.modifier[data-mod^='-'] {
-    background-color: rgba(232, 0, 41, 0.25);
+    &[data-mod^='+'] {
+        background-color: rgba(0, 170, 61, 0.25);
+    }
+    &[data-mod^='-'] {
+        background-color: rgba(232, 0, 41, 0.25);
+    }
 }
 
 .saving-throw {
@@ -64,10 +59,9 @@
     margin: 5px 0 0;
     padding: 5px;
     font-size: 90%;
-}
-
-.skills li {
-    display: flex;
-    align-items: center;
-    padding: 3px 0;
+    li {
+        display: flex;
+        align-items: center;
+        padding: 3px 0;
+    }
 }

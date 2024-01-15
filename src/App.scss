@@ -3,12 +3,13 @@
     background-color: #666; /* 😈 */
 }
 
-.page-wrapper a {
-    text-decoration: none;
-}
-
-.page-wrapper a:hover {
-    text-decoration: underline;
+.page-wrapper {
+    a {
+        text-decoration: none;
+        &:hover {
+            text-decoration: underline;
+        }
+    }
 }
 
 .page {
@@ -23,10 +24,9 @@
     border-radius: 1px;
     background-color: rgba(255, 255, 255, 0.85);
     color: #444;
-}
-
-.sheet-section a {
-    color: dodgerblue;
+    a {
+        color: dodgerblue;
+    }
 }
 
 .flex {
@@ -66,35 +66,41 @@
     border: 1px solid dodgerblue;
     font-size: 80%;
     color: dodgerblue;
+    &:hover {
+        background-color: dodgerblue;
+        color: #fff;
+        text-decoration: none!important;
+    }
+    &.red {
+        border-color: #D83737;
+        color: #D83737;
+        &:hover {
+            background-color: #D83737;
+            color: #fff;
+        }
+    }
 }
-.button:hover, .button--feature:hover {
-    background-color: dodgerblue;
-    color: #fff;
-    text-decoration: none!important;
-}
-.button.red {
-    border-color: #D83737;
-    color: #D83737;
-}
-.button.red:hover {
-    background-color: #D83737;
-    color: #fff;
-}
+
 .button--feature {
     display: inline-block;
     padding: 0.5em 1em;
     background-color: #fff;
     border-radius: 25px;
     color: dodgerblue;
-}
-.button--feature svg {
-    height: 1.1em;
-    margin-bottom: -0.15em;
-    margin-right: 0.35em;
-    fill: dodgerblue;
-}
-.button--feature:hover svg {
-    fill: #fff;
+    &:hover {
+        background-color: dodgerblue;
+        color: #fff;
+        text-decoration: none!important;
+        svg {
+            fill: #fff;
+        }
+    }
+    svg {
+        height: 1.1em;
+        margin-bottom: -0.15em;
+        margin-right: 0.35em;
+        fill: dodgerblue;
+    }
 }
 
 
@@ -115,21 +121,21 @@
     margin-top: 0.5em;
 }
 
-.new-spell-form > * {
-    margin: 4px;
-}
-
-.new-spell-form .text-input label {
-    display: none;
+.new-spell-form {
+    > * {
+        margin: 4px;
+    }
+    .text-input label {
+        display: none;
+    }
 }
 
 .main-footer {
     text-align: center;
     font-size: 80%;
     color: rgba(255,255,255,0.5);
-}
-
-.main-footer a {
-    opacity: 0.75;
-    font-weight: bold;
+    a {
+        opacity: 0.75;
+        font-weight: bold;
+    }
 }

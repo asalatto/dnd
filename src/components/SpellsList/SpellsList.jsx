@@ -1,4 +1,4 @@
-import './SpellsList.css';
+import './SpellsList.scss';
 import { useState, useEffect } from 'react';
 import { ExpandBox } from '../Utils/Utils';
 

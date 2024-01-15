@@ -15,10 +15,9 @@ input[type="text"], select, textarea {
     border: 1px solid #aaa;
     font-size: 110%;
     line-height: 1.25;
-}
-
-input[type="text"][readonly] {
-    background-color: transparent;
+    &[readonly] {
+        background-color: transparent;
+    }
 }
 
 input[type="checkbox"], input[type="radio"] {

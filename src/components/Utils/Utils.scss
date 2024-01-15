@@ -1,15 +1,15 @@
 .util-tooltip {
     position: relative;
     display: inline-block;
-}
-
-.util-tooltip:hover .util-tooltip-message {
-    display: block;
-}
-
-.util-tooltip:hover .util-tooltip-icon {
-    background-color: dodgerblue;
-    color: #fff;
+    &:hover {
+        .util-tooltip-message {
+            display: block;
+        }
+        .util-tooltip-icon {
+            background-color: dodgerblue;
+            color: #fff;
+        }
+    }
 }
 
 .util-tooltip-icon {

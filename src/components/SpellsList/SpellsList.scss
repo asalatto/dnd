@@ -1,0 +1,23 @@
+.spells-list {
+    width: 32.333%;
+    padding: 1%;
+    h4 {
+        margin: 10px 0 4px;
+    }
+    ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        li {
+            margin: 4px 0;
+            padding: 10px;
+        }
+    }
+}
+
+.spell-description {
+    display: block;
+    max-height: 50px;
+    overflow: auto;
+    font-size: 90%;
+}

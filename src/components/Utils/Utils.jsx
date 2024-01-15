@@ -1,4 +1,4 @@
-import "./Utils.css";
+import "./Utils.scss";
 import { useState } from 'react';
 
 

@@ -1,4 +1,4 @@
-import "./Ability.css";
+import "./Ability.scss";
 import Input from "../Input/Input";
 import {
     titleize, 

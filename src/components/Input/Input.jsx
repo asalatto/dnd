@@ -1,4 +1,4 @@
-import "./Input.css";
+import "./Input.scss";
 import { titleize } from "../../utils";
 import { Tooltip } from "../Utils/Utils";
 
