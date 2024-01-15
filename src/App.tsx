@@ -267,7 +267,7 @@ export default function App() {
                             </label>
                         )
                     })}
-                </section>
+                </section>                
                 <form className="new-item-form" onSubmit={(event) => saveItem(event, 'equipment')}>
                     <label>Add New Equipment: </label>
                     <Search name="item_name" endpoint="equipment" updateFunction={addItemFromApi} placeholder="Equipment name" />
@@ -304,7 +304,7 @@ export default function App() {
                             </select>
                         </div>
                         <Input name="spell_save_DC" value={spell_save_dc} tooltip={`8 + ${character.spellcasting_ability || `spellcasting ability`} modifier + proficiency bonus`} readOnly={true} />
-                        <Input name="spell_attack_bonus" value={spell_attack_bonus} tooltip="spellcasting ability modifier + proficiency bonus" readOnly={true} />
+                        <Input name="spell_attack_bonus" value={spell_attack_bonus} tooltip={`${character.spellcasting_ability || `spellcasting ability`} modifier + proficiency bonus`} readOnly={true} />
                     </div>
                 </section>
                     
