@@ -1,5 +1,6 @@
 import "./Utils.scss";
 import { useState } from 'react';
+import { titleize } from "../../utils";
 
 
 export function Tooltip({children}) {
@@ -8,6 +9,18 @@ export function Tooltip({children}) {
             <span className="util-tooltip-icon">?</span>
             <span className="util-tooltip-message">{children}</span>
         </span>
+    )
+}
+
+export function Input({name="", tooltip, ...props}) {
+    return (
+        <div className="util-text-input">
+            <label htmlFor={name}>
+                {titleize(name)}
+                {tooltip ? <Tooltip>{tooltip}</Tooltip> : ''}
+            </label>
+            <input type="text" id={name} {...props}></input>
+        </div>
     )
 }
 

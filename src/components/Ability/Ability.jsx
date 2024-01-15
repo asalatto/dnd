@@ -1,5 +1,5 @@
 import "./Ability.scss";
-import Input from "../Input/Input";
+import { Input } from "../Utils/Utils";
 import {
     titleize, 
     calculateModifier, 

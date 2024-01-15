@@ -1,6 +1,6 @@
 import './Search.scss';
 import { useState, useEffect } from 'react';
-import Input from '../Input/Input';
+import { Input } from '../Utils/Utils';
 import { getApiData } from '../../utils';
 
 

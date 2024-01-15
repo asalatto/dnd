@@ -1,6 +1,6 @@
 import './App.scss';
 import * as React from 'react'
-import Input from './components/Input/Input';
+import { Input } from './components/Utils/Utils';
 import Ability from './components/Ability/Ability';
 import Search from './components/Search/Search';
 import SpellsList from './components/SpellsList/SpellsList';
@@ -264,7 +264,7 @@ export default function App() {
                 <h2>Spells & Cantrips</h2>
                 <section className="sheet-section">
                     <div className="flex">
-                        <div className="text-input">
+                        <div className="util-text-input">
                             <label htmlFor="spellcasting_ability">
                                 Spellcasting Ability
                             </label>
