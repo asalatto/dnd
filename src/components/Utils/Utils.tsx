@@ -21,6 +21,7 @@ interface InputProps {
     name?: string;
     tooltip?: string;
     id?: string;
+    input_classes?: string;
     value?: string|number;
     label?: string;
     onChange?: (event: any) => void;
@@ -29,6 +30,7 @@ interface InputProps {
 export function Input({
     name="",
     tooltip,
+    input_classes="",
     ...props
 }: InputProps) {
     return (
@@ -37,7 +39,7 @@ export function Input({
                 {titleize(name)}
                 {tooltip ? <Tooltip>{tooltip}</Tooltip> : ''}
             </label>
-            <input type="text" id={name} {...props}></input>
+            <input className={input_classes} type="text" id={name} name={name} {...props}></input>
         </div>
     )
 }

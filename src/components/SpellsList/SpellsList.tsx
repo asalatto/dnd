@@ -6,13 +6,13 @@ import { ExpandBox } from '../Utils/Utils';
 interface SpellsListProps {
     level: string|number;
     spells?: any[];
-    removeSpell: (spell_name: string) => void;
+    removeItem: (spell_name: string) => void;
 }
 
 export default function SpellsList({
     level,
     spells=[],
-    removeSpell
+    removeItem
 }: SpellsListProps) {
 
     const getSpells = (): any[] => {
@@ -62,7 +62,7 @@ export default function SpellsList({
                                         </span>
                                         <span>
                                             {/* <a className="button" onClick={() => switchMode(spell.name)}>edit</a> */}
-                                            <a className="button red" onClick={() => removeSpell(spell.name)}>remove</a>
+                                            <a className="button red" onClick={() => removeItem(spell.name)}>remove</a>
                                         </span>
                                     </div>
                                     <ExpandBox style={{fontSize: '90%'}}>{spell.description}</ExpandBox>

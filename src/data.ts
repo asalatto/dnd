@@ -1,7 +1,18 @@
-export interface Spell {
+interface Spell {
     name: string;
     level: number;
     description: string;
+}
+
+interface Equipment {
+    name: string;
+    description: string;
+}
+
+interface Currency {
+    name: string;
+    label: string;
+    amount: number;
 }
 
 export interface Character {
@@ -29,6 +40,8 @@ export interface Character {
     hit_dice_total: string|number;
     spellcasting_ability: "charisma"|"intelligence"|"wisdom"|"";
     spells: Spell[];
+    equipment: Equipment[];
+    currency: Currency[];
 }
 
 export const blank_character: Character = {
@@ -56,6 +69,14 @@ export const blank_character: Character = {
     "hit_dice_total": "",
     "spellcasting_ability": "",
     "spells": [],
+    "equipment": [],
+    "currency": [
+        {"name": "copper", "label": "CP", "amount": 0},
+        {"name": "silver", "label": "SP", "amount": 0},
+        {"name": "electrum", "label": "EP", "amount": 0},
+        {"name": "gold", "label": "GP", "amount": 0},
+        {"name": "platinum", "label": "PP", "amount": 0},
+    ]
 }
 
 export const skill_map = {

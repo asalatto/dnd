@@ -28,7 +28,7 @@ export default function Search({
         getApiData(endpoint).then(data => setData(data));
     }, [])
 
-    function getFilteredData(event: ChangeEvent): void {
+    const getFilteredData = (event: ChangeEvent): void => {
         const element = event.target as HTMLInputElement;
         const query = element.value;
         const results = data?.results || null;
@@ -48,7 +48,7 @@ export default function Search({
         setFilteredOptions(filtered_results);
     }
 
-    function selectOption(event) {
+    const selectOption = (event) => {
         const clicked = event.target.innerText.trim();
         updateFunction(event);
         setChosen(clicked);
@@ -56,8 +56,8 @@ export default function Search({
     }
 
     return (
-        <div className="search-input">
-            <Input id={name} name={name} onChange={getFilteredData} value={chosen} {...props} />
+        <div className="search-input" data-endpoint={endpoint}>
+            <Input input_classes="form-field" id={name} name={name} onChange={getFilteredData} value={chosen} {...props} />
             <div className="search-options">
                 {
                     filteredOptions?.map(opt => {

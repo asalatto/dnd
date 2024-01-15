@@ -63,3 +63,29 @@ export function rollArray(times: number, die: number): number[] {
     }
     return array;
 }
+
+// Parses the DnD 5e API's response description based on request type 
+export function getApiItemDescription(endpoint: string, data: any): string {
+    let val = '';
+
+    if (endpoint === 'spells') {
+        val += `(Range: ${data.range}) ${data.desc} ${data.higher_level ?? ''}`;
+    } else if (endpoint === 'equipment') {
+        val += `[${data.equipment_category.name}] `;
+        if (data.equipment_category.index === 'weapon') {
+            val += `${data.category_range} weapon (${data.damage.damage_dice} ${data.damage.damage_type.name} damage). `;
+            if (data.range) {
+                val += `Range ${data.range.normal}${data.range.long ? `/${data.range.long}` : ''}. `;
+            }
+        } 
+        if (data.contents?.length > 0) {
+            val += `Contains: ${data.contents.map(item => ` ${item.item.name}${item.quantity > 1 ? ` (${item.quantity})` :''}`)}. `; 
+        }
+        val += data.quantity ? `(Quantity: ${data.quantity}) ` : '';
+        val += data.desc ?? '';
+    } else {
+        val += data.desc;
+    }
+
+    return val;
+ }

@@ -3,9 +3,8 @@ import * as React from 'react'
 import Ability from './components/Ability/Ability';
 import Search from './components/Search/Search';
 import SpellsList from './components/SpellsList/SpellsList';
-import { Input } from './components/Utils/Utils';
+import { Input, ExpandBox } from './components/Utils/Utils';
 import {
-    Spell,
     Character,
     blank_character,
     skill_map
@@ -16,7 +15,8 @@ import {
     calculateModifier, 
     getModifierDisplay, 
     getProficiencyBonus, 
-    rollArray 
+    rollArray,
+    getApiItemDescription
 } from './utils';
 
 
@@ -47,6 +47,17 @@ export default function App() {
         setCharacter(character => ({
             ...character,
             ...updated_field
+        }) as Character);
+    }
+
+    const updateCurrency = (event: any): void => {
+        const copied_currency = character.currency;
+        const this_currency = copied_currency.find(cur => cur.name === event.target.name);
+        this_currency['amount'] = event.target.value; 
+
+        setCharacter(character => ({
+            ...character,
+            ...{"currency": copied_currency}
         }) as Character);
     }
 
@@ -103,64 +114,78 @@ export default function App() {
         })
     }
 
-    const saveSpell = (event: any): void => {
+    const saveItem = (event: any, key: string): void => {
         event.preventDefault();
         
-        const form = event.target as HTMLFormElement;
+        const form = event.target;
+        const fields = form.querySelectorAll('.form-field');
         const error_box = form.querySelector('.error') as HTMLElement;
-        const spell_name = form.spell_name.value.trim();
+        const item_name = form.item_name.value.trim();
 
-        if (!spell_name) {
-            error_box.innerText = 'Enter spell name.';
-            return;
-        } else if (character.spells.findIndex(spell => spell.name == spell_name) > -1) {
-            error_box.innerText = 'Spell already exists.';
-            return;
-        } else {
-            error_box.innerText = '';
+        if (error_box) {
+            if (!item_name) {
+                error_box.innerText = 'Enter name.';
+                return;
+            } else if (character[key].findIndex(item => item.name == item_name) > -1) {
+                error_box.innerText = 'Item already exists.';
+                return;
+            } else {
+                error_box.innerText = '';
+            }
         }
 
-        const new_spell: Spell[] = [{
-            name: form.spell_name.value,
-            level: form.level.value,
-            description: form.description.value
-        }]
+        const new_item = {};
+        fields.forEach(field => {
+            if (field.name === 'item_name') {
+                new_item['name'] = field.value;
+            } else {
+                new_item[field.name] = field.value;
+            }
+        })
 
-        setCharacter(character => ({
-            ...character,
-            ...{"spells": [...character.spells, ...new_spell] as Spell[]}
-        }) as Character);
+        const character_copy = JSON.parse(JSON.stringify(character));
+        character_copy[key] = [...character[key], ...[new_item]];
+
+        setCharacter(character_copy as Character);
 
         form.reset();
     }
+    
+    const removeItem = (item_name: string, key: string): void => {
+        const items = character[key];
+        const item_index = items.findIndex(item => item.name == item_name);
+        items.splice(item_index, 1);
 
-    const removeSpell = (spell_name: string): void => {
-        const spells = character.spells;
-        const spell_index = spells.findIndex(spell => spell.name == spell_name);
-        spells.splice(spell_index, 1);
+        const character_copy = JSON.parse(JSON.stringify(character));
+        character_copy[key] = items;
 
-        setCharacter(character => ({
-            ...character,
-            ...{"spells": spells as Spell[]}
-        }) as Character);
+        setCharacter(character_copy as Character);
     }
 
-    const addSpellFromApi = async (event: any): Promise<any> => {
-        const spell_index = event.target.getAttribute('data-index');        
-        if (!spell_index) {
+    const addItemFromApi = async (event: any): Promise<any> => {
+        const data_index = event.target.getAttribute('data-index');
+        if (!data_index) {
             return;
         }
 
-        const spell_data = await getApiData(`spells/${spell_index}`);
-        const spell_description = `(Range: ${spell_data.range}) ${spell_data.desc} ${spell_data.higher_level ?? ''}`;
+        const form = event.target.closest('form');
+        const fields = form.querySelectorAll('.form-field');
+        const endpoint = event.target.closest('.search-input').getAttribute('data-endpoint');
+        const data = await getApiData(`${endpoint}/${data_index}`);
+
+        fields.forEach(field => {
+            if (field.name === 'item_name') {
+                return;
+            }
+
+            let val = data[field.name];
+            if (field.name === 'description') {
+                val = getApiItemDescription(endpoint, data);
+            }
+
+            form.querySelector(`[name="${field.name}"]`).value = val;
+        })
         
-        const new_spell_form = document.querySelector('.new-spell-form');
-        if (new_spell_form) {
-            const level_input = new_spell_form.querySelector('select[name="level"]') as HTMLInputElement;
-            const description_input = new_spell_form.querySelector('textarea[name="description"]') as HTMLInputElement;
-            level_input.value = spell_data.level;
-            description_input.value = spell_description;
-        }
     }
 
 
@@ -232,6 +257,38 @@ export default function App() {
                     }
                 </section>
 
+                <h2>Equipment</h2>
+                <section className="sheet-section flex space-around">
+                    <div>Currency:</div>
+                    {character.currency.map(cur => {
+                        return (
+                            <label key={cur.name} style={{ width: '16%' }}>
+                                <input type="number" name={cur.name} style={{ width: '75%' }} placeholder={cur.name} value={cur.amount} onChange={updateCurrency}/> {cur.label}
+                            </label>
+                        )
+                    })}
+                </section>
+                <form className="new-item-form" onSubmit={(event) => saveItem(event, 'equipment')}>
+                    <label>Add New Equipment: </label>
+                    <Search name="item_name" endpoint="equipment" updateFunction={addItemFromApi} placeholder="Equipment name" />
+                    <textarea className="form-field" name="description" rows={1} cols={40} placeholder="Details" ></textarea>
+                    <input type="submit" value="Save Equipment" />
+                    <div className="error"></div>
+                </form>
+                <ul className="equipment-list-container sheet-section">
+                    {
+                        character.equipment.map(item => {
+                            return (
+                                <li key={item.name}>
+                                    <a className="button red" style={{ float: 'right', marginTop: '0' }} onClick={() => removeItem(item.name, 'equipment')}>remove</a>
+                                    <strong>{item.name}{item.description? ': ' : ''}</strong>
+                                    <ExpandBox>{item.description}</ExpandBox>
+                                </li>
+                            )
+                        }) 
+                    }
+                </ul>
+
                 <h2>Spells & Cantrips</h2>
                 <section className="sheet-section">
                     <div className="flex">
@@ -246,14 +303,14 @@ export default function App() {
                                 <option value="wisdom">Wisdom</option>
                             </select>
                         </div>
-                        <Input name="spell_save_DC" value={spell_save_dc} tooltip="8 + spellcasting ability modifier + proficiency bonus" readOnly={true} />
+                        <Input name="spell_save_DC" value={spell_save_dc} tooltip={`8 + ${character.spellcasting_ability || `spellcasting ability`} modifier + proficiency bonus`} readOnly={true} />
                         <Input name="spell_attack_bonus" value={spell_attack_bonus} tooltip="spellcasting ability modifier + proficiency bonus" readOnly={true} />
                     </div>
                 </section>
-
-                <form className="new-spell-form" onSubmit={saveSpell}>
+                    
+                <form className="new-item-form" onSubmit={(event) => saveItem(event, 'spells')}>
                     <label>Add New Spell: </label>
-                    <select name="level">
+                    <select className="form-field" name="level">
                         <option value="" disabled>Spell level</option>
                         {
                             Array.from(Array(10).keys()).map(lvl => {
@@ -261,8 +318,8 @@ export default function App() {
                             })
                         }
                     </select>
-                    <Search name="spell_name" endpoint="spells" updateFunction={addSpellFromApi} placeholder="Spell name" />
-                    <textarea name="description" rows={1} cols={40} placeholder="Effects &amp; details" ></textarea>
+                    <Search name="item_name" endpoint="spells" updateFunction={addItemFromApi} placeholder="Spell name" />
+                    <textarea className="form-field" name="description" rows={1} cols={40} placeholder="Effects &amp; details"></textarea>
                     <input type="submit" value="Save Spell" />
                     <div className="error"></div>
                 </form>
@@ -271,7 +328,7 @@ export default function App() {
                     {
                         Array.from(Array(10).keys()).map(lvl => {
                             const spells = character.spells.filter(spell => spell.level == lvl);
-                            return <SpellsList key={lvl} level={lvl} spells={spells} removeSpell={removeSpell} />
+                            return <SpellsList key={lvl} level={lvl} spells={spells} removeItem={(event) => removeItem(event, 'spells')} />
                         }) 
                     }
                 </div>
