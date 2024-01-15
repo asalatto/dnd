@@ -3,8 +3,19 @@ import { useState, useEffect } from 'react';
 import { ExpandBox } from '../Utils/Utils';
 
 
-export default function SpellsList({level="", spells=[], removeSpell}) {
-    function getSpells() {
+export interface SpellsListProps {
+    level: string|number;
+    spells?: any[];
+    removeSpell: (spell_name: string) => void;
+}
+
+export default function SpellsList({
+    level,
+    spells=[],
+    removeSpell
+}: SpellsListProps) {
+
+    const getSpells = (): any[] => {
         if (spells.length == 0) {
             return [];
         } else {
@@ -27,7 +38,7 @@ export default function SpellsList({level="", spells=[], removeSpell}) {
     } else {
         const title = level == 0 ? 'Cantrips' : `Level ${level} Spells`;
 
-        function switchMode(spell_name) {
+        const switchMode = (spell_name: string): void => {
             const updated_spellboxes = spellboxes.map(spell => {
                 if (spell.name == spell_name) {
                     spell['editing'] = !spell['editing'];
@@ -50,7 +61,7 @@ export default function SpellsList({level="", spells=[], removeSpell}) {
                                             <strong>{spell.name}</strong>
                                         </span>
                                         <span>
-                                            <a className="button" onClick={() => switchMode(spell.name)}>edit</a>
+                                            {/* <a className="button" onClick={() => switchMode(spell.name)}>edit</a> */}
                                             <a className="button red" onClick={() => removeSpell(spell.name)}>remove</a>
                                         </span>
                                     </div>

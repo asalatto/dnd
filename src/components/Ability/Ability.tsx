@@ -1,4 +1,5 @@
 import "./Ability.scss";
+import { ChangeEvent } from "react";
 import { Input } from "../Utils/Utils";
 import {
     titleize, 
@@ -8,9 +9,21 @@ import {
 } from "../../utils";
 
 
+export interface AbilityProps {
+    name?: string;
+    value?: number|string;
+    skills?: any[];
+    proficiencies?: any[];
+    saving_throws?: any[];
+    level?: number;
+    updateCharacter?: (event: any) => void;
+    updateSkillProficiency?: (event: any) => void;
+    updateSavingThrow?: (event: ChangeEvent) => void;
+}
+
 export default function Ability({
     name="",
-    value="",
+    value=0,
     skills=[],
     proficiencies=[],
     saving_throws=[],
@@ -18,8 +31,8 @@ export default function Ability({
     updateCharacter,
     updateSkillProficiency,
     updateSavingThrow
-}) {
-    const modifier = calculateModifier(value);
+}: AbilityProps) {
+    const modifier = calculateModifier(value as number);
     const modifier_display = value ? getModifierDisplay(modifier) : null;
     const saving_throw = saving_throws.includes(name) ? + (getProficiencyBonus(level) + modifier) : modifier;
     const saving_throw_display = value ? `(${getModifierDisplay(saving_throw)})` : null;

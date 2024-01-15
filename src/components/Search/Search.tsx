@@ -1,20 +1,36 @@
 import './Search.scss';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, ChangeEvent } from 'react';
 import { Input } from '../Utils/Utils';
-import { getApiData } from '../../utils';
+import { getApiData, ApiResults } from '../../utils';
 
 
-export default function Search({name="", endpoint="", value="", updateFunction, ...props}) {
-    const [data, setData] = useState();
-    const [filteredOptions, setFilteredOptions] = useState([]);
+export interface SearchProps {
+    name?: string;
+    endpoint: string;
+    value?: string;
+    updateFunction: (event: any) => Promise<any>;
+    placeholder: string;
+}
+
+export default function Search({
+    name="",
+    endpoint,
+    value="",
+    updateFunction,
+    ...props
+}: SearchProps) {
+
+    const [data, setData] = useState({} as ApiResults);
+    const [filteredOptions, setFilteredOptions] = useState<any[]>([]);
     const [chosen, setChosen] = useState(value);
 
     useEffect(() => {
         getApiData(endpoint).then(data => setData(data));
     }, [])
 
-    function getFilteredData(event) {
-        const query = event.target.value;
+    function getFilteredData(event: ChangeEvent): void {
+        const element = event.target as HTMLInputElement;
+        const query = element.value;
         const results = data?.results || null;
 
         updateFunction(event);

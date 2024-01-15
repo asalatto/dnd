@@ -60,12 +60,12 @@ const blank_character = {
 export default function App() {
 
     // Clears character stored in state/local storage
-    function clearCharacter() {
+    const clearCharacter = (): void => {
         setCharacter(blank_character);
     }
 
     // Updates field in character state
-    function updateCharacter(event) {
+    const updateCharacter = (event: any): void => {
         const updated_field = {};
         const val = event.target.value || event.target.innerText.trim();
         updated_field[event.target.id] = val;
@@ -77,13 +77,14 @@ export default function App() {
     }
 
     // Updates selected skill proficiencies in state
-    function updateSkillProficiency(event) {
-        const skill = event.target.id;
+    const updateSkillProficiency = (event: React.ChangeEvent): void => {
+        const element = event.target as HTMLInputElement;
+        const skill = element.id;
         const current_proficiencies = character.skill_proficiencies;
 
-        if (event.target.checked && !current_proficiencies.includes(skill)) {
+        if (element.checked && !current_proficiencies.includes(skill)) {
             current_proficiencies.push(skill);
-        } else if (!event.target.checked && current_proficiencies.includes(skill)) {
+        } else if (!element.checked && current_proficiencies.includes(skill)) {
             current_proficiencies.splice(current_proficiencies.indexOf(skill), 1);
         }
 
@@ -94,13 +95,14 @@ export default function App() {
     }
 
     // Updates selected ability saving throws in state
-    function updateSavingThrow(event) {
-        const ability = event.target.value;
+    const updateSavingThrow = (event: React.ChangeEvent): void => {
+        const element = event.target as HTMLInputElement;
+        const ability = element.value;
         const current_saving_throws = character.saving_throws;
 
-        if (event.target.checked && !current_saving_throws.includes(ability)) {
+        if (element.checked && !current_saving_throws.includes(ability)) {
             current_saving_throws.push(ability);
-        } else if (!event.target.checked && current_saving_throws.includes(ability)) {
+        } else if (!element.checked && current_saving_throws.includes(ability)) {
             current_saving_throws.splice(current_saving_throws.indexOf(ability), 1);
         }
 
@@ -110,7 +112,7 @@ export default function App() {
         }));
     }
 
-    function rollRandomAbilities() {
+    const rollRandomAbilities = (): void => {
         const abilities = ["strength", "dexterity", "constitution", "intelligence", "wisdom", "charisma"];
         abilities.forEach(ability => {
             const roll = rollArray(4,6);
@@ -127,24 +129,27 @@ export default function App() {
         })
     }
 
-    function saveSpell(event) {
+    const saveSpell = (event: any): void => {
         event.preventDefault();
         
-        const error_box = event.target.querySelector('.error');
-        const spell_name = event.target.name.value.trim();
+        const form = event.target as HTMLFormElement;
+        const error_box = form.querySelector('.error') as HTMLElement;
+        const spell_name = form.spell_name.value.trim();
+
         if (!spell_name) {
             error_box.innerText = 'Enter spell name.';
             return;
         } else if (character.spells.findIndex(spell => spell.name == spell_name) > -1) {
             error_box.innerText = 'Spell already exists.';
             return;
+        } else {
+            error_box.innerText = '';
         }
-        error_box.innerText = '';
 
         const new_spell = [{
-            name: event.target.name.value,
-            level: event.target.level.value,
-            description: event.target.description.value
+            name: form.spell_name.value,
+            level: form.level.value,
+            description: form.description.value
         }]
 
         setCharacter(character => ({
@@ -152,10 +157,10 @@ export default function App() {
             ...{"spells": [...character.spells, ...new_spell]}
         }));
 
-        event.target.reset();
+        form.reset();
     }
 
-    function removeSpell(spell_name) {
+    const removeSpell = (spell_name: string): void => {
         const spells = character.spells;
         const spell_index = spells.findIndex(spell => spell.name == spell_name);
         spells.splice(spell_index, 1);
@@ -166,18 +171,22 @@ export default function App() {
         }));
     }
 
-    async function addSpellFromApi(event) {
+    const addSpellFromApi = async (event: any): Promise<any> => {
         const spell_index = event.target.getAttribute('data-index');        
         if (!spell_index) {
             return;
         }
 
-        const new_spell_form = document.querySelector('.new-spell-form');
         const spell_data = await getApiData(`spells/${spell_index}`);
         const spell_description = `(Range: ${spell_data.range}) ${spell_data.desc} ${spell_data.higher_level ?? ''}`;
-
-        new_spell_form.querySelector('select[name="level"]').value = spell_data.level;
-        new_spell_form.querySelector('textarea[name="description"]').value = spell_description;
+        
+        const new_spell_form = document.querySelector('.new-spell-form');
+        if (new_spell_form) {
+            const level_input = new_spell_form.querySelector('select[name="level"]') as HTMLInputElement;
+            const description_input = new_spell_form.querySelector('textarea[name="description"]') as HTMLInputElement;
+            level_input.value = spell_data.level;
+            description_input.value = spell_description;
+        }
     }
 
 
@@ -269,7 +278,7 @@ export default function App() {
                                 Spellcasting Ability
                             </label>
                             <select id="spellcasting_ability" onChange={updateCharacter} value={character.spellcasting_ability}>
-                                <option value="" default disabled>Select ability</option>
+                                <option value="" disabled>Select ability</option>
                                 <option value="charisma">Charisma</option>
                                 <option value="intelligence">Intelligence</option>
                                 <option value="wisdom">Wisdom</option>
@@ -283,15 +292,15 @@ export default function App() {
                 <form className="new-spell-form" onSubmit={saveSpell}>
                     <label>Add New Spell: </label>
                     <select name="level">
-                        <option value="" default disabled>Spell level</option>
+                        <option value="" disabled>Spell level</option>
                         {
                             Array.from(Array(10).keys()).map(lvl => {
                                 return <option key={lvl} value={lvl}>{lvl == 0 ? `Cantrip` : lvl}</option>
                             })
                         }
                     </select>
-                    <Search name="name" endpoint="spells" updateFunction={addSpellFromApi} placeholder="Spell name" />
-                    <textarea name="description" rows="1" cols="40" placeholder="Effects &amp; details" ></textarea>
+                    <Search name="spell_name" endpoint="spells" updateFunction={addSpellFromApi} placeholder="Spell name" />
+                    <textarea name="description" rows={1} cols={40} placeholder="Effects &amp; details" ></textarea>
                     <input type="submit" value="Save Spell" />
                     <div className="error"></div>
                 </form>
