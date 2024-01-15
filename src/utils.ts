@@ -1,18 +1,11 @@
-import { blank_character } from './data';
-
 export function titleize(string: string): string {
     const capitalized = string.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1))
     return capitalized.join(' ');
 }
 
 export function getLocalData(key: string, defaultData: any): any {
-    console.log(Object.keys(blank_character))
     if (window.localStorage.getItem(key)) {
-        const local_character = JSON.parse(window.localStorage.getItem(key));
-        if (Object.keys(blank_character) != local_character) {
-            return blank_character;
-        }
-        return local_character;
+        return JSON.parse(window.localStorage.getItem(key))
     }
     return defaultData;
 }
