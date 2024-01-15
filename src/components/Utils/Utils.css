@@ -1,18 +1,18 @@
-.tooltip {
+.util-tooltip {
     position: relative;
     display: inline-block;
 }
 
-.tooltip:hover .tooltip-message {
+.util-tooltip:hover .util-tooltip-message {
     display: block;
 }
 
-.tooltip:hover .tooltip-icon {
+.util-tooltip:hover .util-tooltip-icon {
     background-color: dodgerblue;
     color: #fff;
 }
 
-.tooltip-icon {
+.util-tooltip-icon {
     display: inline-block;
     width: 15px;
     height: 15px;
@@ -26,7 +26,7 @@
     text-align: center;
 }
 
-.tooltip-message {
+.util-tooltip-message {
     display: none;
     position: absolute;
     left: 100%;

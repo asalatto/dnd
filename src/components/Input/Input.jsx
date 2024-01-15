@@ -1,6 +1,6 @@
 import "./Input.css";
 import { titleize } from "../../utils";
-import Tooltip from "../Tooltip/Tooltip";
+import { Tooltip } from "../Utils/Utils";
 
 export default function Input({name="", tooltip, ...props}) {
     return (

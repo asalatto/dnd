@@ -1,6 +1,6 @@
 import './SpellsList.css';
 import { useState, useEffect } from 'react';
-import ExpandBox from '../ExpandBox/ExpandBox';
+import { ExpandBox } from '../Utils/Utils';
 
 
 export default function SpellsList({level="", spells=[], removeSpell}) {
