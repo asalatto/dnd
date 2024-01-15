@@ -1,11 +1,27 @@
-import * as React from 'react'
 import './App.css';
-import { getLocalData, getApiData, calculateModifier, getModifierDisplay, getProficiencyBonus, rollArray } from './utils';
+import * as React from 'react'
 import Input from './components/Input/Input';
+import Ability from './components/Ability/Ability';
 import Search from './components/Search/Search';
-import AbilityArray from './components/AbilityArray/AbilityArray';
 import SpellsList from './components/SpellsList/SpellsList';
+import { 
+    getLocalData, 
+    getApiData, 
+    calculateModifier, 
+    getModifierDisplay, 
+    getProficiencyBonus, 
+    rollArray 
+} from './utils';
 
+
+const skill_map = {
+    "strength": ["athletics"],
+    "dexterity": ["acrobatics", "sleight of hand", "stealth"],
+    "constitution": [],
+    "intelligence": ["arcana", "history", "investigation", "nature", "religion"],
+    "wisdom": ["animal handling", "insight", "medicine", "perception", "survival"],
+    "charisma": ["deception", "intimidation", "performance", "persuasion"],
+}
 
 const blank_character = {
     "theme": "",
@@ -50,46 +66,47 @@ export default function App() {
 
     // Updates field in character state
     function updateCharacter(event) {
-        const updatedField = {};
+        const updated_field = {};
         const val = event.target.value || event.target.innerText.trim();
-        updatedField[event.target.id] = val;
+        updated_field[event.target.id] = val;
+
         setCharacter(character => ({
             ...character,
-            ...updatedField
+            ...updated_field
         }));
     }
 
     // Updates selected skill proficiencies in state
     function updateSkillProficiency(event) {
         const skill = event.target.id;
-        const currentProficiencies = character.skill_proficiencies;
+        const current_proficiencies = character.skill_proficiencies;
 
-        if (event.target.checked && !currentProficiencies.includes(skill)) {
-            currentProficiencies.push(skill);
-        } else if (!event.target.checked && currentProficiencies.includes(skill)) {
-            currentProficiencies.splice(currentProficiencies.indexOf(skill), 1);
+        if (event.target.checked && !current_proficiencies.includes(skill)) {
+            current_proficiencies.push(skill);
+        } else if (!event.target.checked && current_proficiencies.includes(skill)) {
+            current_proficiencies.splice(current_proficiencies.indexOf(skill), 1);
         }
 
         setCharacter(character => ({
             ...character,
-            ...{"skill_proficiencies": currentProficiencies}
+            ...{"skill_proficiencies": current_proficiencies}
         }));
     }
 
     // Updates selected ability saving throws in state
     function updateSavingThrow(event) {
         const ability = event.target.value;
-        const currentSavingThrows = character.saving_throws;
+        const current_saving_throws = character.saving_throws;
 
-        if (event.target.checked && !currentSavingThrows.includes(ability)) {
-            currentSavingThrows.push(ability);
-        } else if (!event.target.checked && currentSavingThrows.includes(ability)) {
-            currentSavingThrows.splice(currentSavingThrows.indexOf(ability), 1);
+        if (event.target.checked && !current_saving_throws.includes(ability)) {
+            current_saving_throws.push(ability);
+        } else if (!event.target.checked && current_saving_throws.includes(ability)) {
+            current_saving_throws.splice(current_saving_throws.indexOf(ability), 1);
         }
 
         setCharacter(character => ({
             ...character,
-            ...{"saving_throws": currentSavingThrows}
+            ...{"saving_throws": current_saving_throws}
         }));
     }
 
@@ -113,18 +130,18 @@ export default function App() {
     function saveSpell(event) {
         event.preventDefault();
         
-        const errorBox = event.target.querySelector('.error');
-        const spellName = event.target.name.value.trim();
-        if (!spellName) {
-            errorBox.innerText = 'Enter spell name.';
+        const error_box = event.target.querySelector('.error');
+        const spell_name = event.target.name.value.trim();
+        if (!spell_name) {
+            error_box.innerText = 'Enter spell name.';
             return;
-        } else if (character.spells.findIndex(spell => spell.name == spellName) > -1) {
-            errorBox.innerText = 'Spell already exists.';
+        } else if (character.spells.findIndex(spell => spell.name == spell_name) > -1) {
+            error_box.innerText = 'Spell already exists.';
             return;
         }
-        errorBox.innerText = '';
+        error_box.innerText = '';
 
-        const newSpell = [{
+        const new_spell = [{
             name: event.target.name.value,
             level: event.target.level.value,
             description: event.target.description.value
@@ -132,17 +149,16 @@ export default function App() {
 
         setCharacter(character => ({
             ...character,
-            ...{"spells": [...character.spells, ...newSpell]}
+            ...{"spells": [...character.spells, ...new_spell]}
         }));
 
         event.target.reset();
     }
 
-    function removeSpell(event) {
-        const spellName = event.target.parentNode.getAttribute('data-spell-name');
+    function removeSpell(spell_name) {
         const spells = character.spells;
-        const spellIndex = spells.findIndex(spell => spell.name == spellName);
-        spells.splice(spellIndex, 1);
+        const spell_index = spells.findIndex(spell => spell.name == spell_name);
+        spells.splice(spell_index, 1);
 
         setCharacter(character => ({
             ...character,
@@ -151,24 +167,24 @@ export default function App() {
     }
 
     async function addSpellFromApi(event) {
-        const spellIndex = event.target.getAttribute('data-index');        
-        if (!spellIndex) {
+        const spell_index = event.target.getAttribute('data-index');        
+        if (!spell_index) {
             return;
         }
 
-        const newSpellForm = document.querySelector('.new-spell-form');
-        const spellData = await getApiData(`spells/${spellIndex}`);
-        const spellDescription = `(Range: ${spellData.range}) ${spellData.desc} ${spellData.higher_level ?? ''}`;
+        const new_spell_form = document.querySelector('.new-spell-form');
+        const spell_data = await getApiData(`spells/${spell_index}`);
+        const spell_description = `(Range: ${spell_data.range}) ${spell_data.desc} ${spell_data.higher_level ?? ''}`;
 
-        newSpellForm.querySelector('select[name="level"]').value = spellData.level;
-        newSpellForm.querySelector('textarea[name="description"]').value = spellDescription;
+        new_spell_form.querySelector('select[name="level"]').value = spell_data.level;
+        new_spell_form.querySelector('textarea[name="description"]').value = spell_description;
     }
 
 
     const [character, setCharacter] = React.useState(() => getLocalData('character', blank_character));
-    const proficiencyBonus = getProficiencyBonus(character.level);
-    const spellSaveDC = (8 + calculateModifier(character[character.spellcasting_ability]) + proficiencyBonus);
-    const spellAttackBonus = (getModifierDisplay(calculateModifier(character[character.spellcasting_ability]) + proficiencyBonus));
+    const proficiency_bonus = getProficiencyBonus(character.level);
+    const spell_save_dc = (8 + calculateModifier(character[character.spellcasting_ability]) + proficiency_bonus);
+    const spell_attack_bonus = (getModifierDisplay(calculateModifier(character[character.spellcasting_ability]) + proficiency_bonus));
 
     // Keep local storage up-to-date with state
     React.useEffect(() => {
@@ -218,12 +234,31 @@ export default function App() {
                     </a>
                 </div>
                 <section className="sheet-section">
-                    <AbilityArray 
-                        character={character} 
-                        updateCharacter={updateCharacter} 
-                        updateSkillProficiency={updateSkillProficiency} 
-                        updateSavingThrow={updateSavingThrow} 
-                    />
+                    {
+                        Object.keys(skill_map).map(skill => {
+                            const proficiencies = [];
+                            if (character.skill_proficiencies.length > 0 && skill_map[skill].length > 0) {
+                                skill_map[skill].forEach(skill => {
+                                    if (character.skill_proficiencies.includes(skill)) {
+                                        proficiencies.push(skill);
+                                    }
+                                })
+                            }
+
+                            return <Ability
+                                key={skill} 
+                                name={skill}
+                                skills={skill_map[skill]}
+                                proficiencies={proficiencies}
+                                saving_throws={character.saving_throws}
+                                level={character.level}
+                                updateCharacter={updateCharacter} 
+                                updateSkillProficiency={updateSkillProficiency} 
+                                updateSavingThrow={updateSavingThrow}
+                                value={character[skill]} 
+                            />
+                        })
+                    }
                 </section>
 
                 <h2>Spells & Cantrips</h2>
@@ -240,8 +275,8 @@ export default function App() {
                                 <option value="wisdom">Wisdom</option>
                             </select>
                         </div>
-                        <Input name="spell_save_DC" value={spellSaveDC} tooltip="8 + spellcasting ability modifier + proficiency bonus" readOnly={true} />
-                        <Input name="spell_attack_bonus" value={spellAttackBonus} tooltip="spellcasting ability modifier + proficiency bonus" readOnly={true} />
+                        <Input name="spell_save_DC" value={spell_save_dc} tooltip="8 + spellcasting ability modifier + proficiency bonus" readOnly={true} />
+                        <Input name="spell_attack_bonus" value={spell_attack_bonus} tooltip="spellcasting ability modifier + proficiency bonus" readOnly={true} />
                     </div>
                 </section>
 

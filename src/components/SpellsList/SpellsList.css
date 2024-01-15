@@ -24,3 +24,13 @@
     overflow: auto;
     font-size: 90%;
 }
+
+.spells-list input[type="text"], .spells-list textarea {
+    margin-left: -5px;
+}
+
+.spells-list input.read, .spells-list textarea.read {
+    border: 0;
+    background-color: transparent;
+    resize: none;
+}

@@ -1,14 +1,15 @@
 import './Search.css';
-import * as React from 'react'
+import { useState, useEffect } from 'react';
 import Input from '../Input/Input';
 import { getApiData } from '../../utils';
 
-export default function Search({name="", endpoint="", value="", updateFunction, ...props}) {
-    const [data, setData] = React.useState();
-    const [filteredOptions, setFilteredOptions] = React.useState([]);
-    const [chosen, setChosen] = React.useState(value);
 
-    React.useEffect(() => {
+export default function Search({name="", endpoint="", value="", updateFunction, ...props}) {
+    const [data, setData] = useState();
+    const [filteredOptions, setFilteredOptions] = useState([]);
+    const [chosen, setChosen] = useState(value);
+
+    useEffect(() => {
         getApiData(endpoint).then(data => setData(data));
     }, [])
 
@@ -27,8 +28,8 @@ export default function Search({name="", endpoint="", value="", updateFunction, 
             return;
         }
 
-        const filteredResults = results.filter(i => i.name.toLowerCase().includes(query.toLowerCase())) || [];
-        setFilteredOptions(filteredResults);
+        const filtered_results = results.filter(i => i.name.toLowerCase().includes(query.toLowerCase())) || [];
+        setFilteredOptions(filtered_results);
     }
 
     function selectOption(event) {

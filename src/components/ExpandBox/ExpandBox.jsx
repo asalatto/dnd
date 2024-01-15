@@ -1,20 +1,16 @@
-import * as React from 'react';
 import './ExpandBox.css';
+import { useState } from 'react';
+
 
 export default function ExpandBox({height="50", children, ...props}) {
-    const [expanded, setExpanded] = React.useState(false);
+    const [expanded, setExpanded] = useState(false);
 
     return (
         <div className={`expand-box ${expanded ? 'expanded' : 'collapsed'}`} {...props}>
             <div style={{ maxHeight: `${height}px` }}>
                 {children}
             </div>
-            {
-                expanded ? 
-                    <a onClick={() => setExpanded(false)}>(see less)</a> 
-                : 
-                    <a onClick={() => setExpanded(true)}>(see more)</a>
-            }
+            <a onClick={() => setExpanded(!expanded)}>(see {expanded ? 'less' : 'more'})</a>
         </div>
     )
 }
