@@ -1,9 +1,15 @@
 import './App.scss';
 import * as React from 'react'
-import { Input } from './components/Utils/Utils';
 import Ability from './components/Ability/Ability';
 import Search from './components/Search/Search';
 import SpellsList from './components/SpellsList/SpellsList';
+import { Input } from './components/Utils/Utils';
+import {
+    Spell,
+    Character,
+    blank_character,
+    skill_map
+} from './data';
 import { 
     getLocalData, 
     getApiData, 
@@ -14,54 +20,22 @@ import {
 } from './utils';
 
 
-const skill_map = {
-    "strength": ["athletics"],
-    "dexterity": ["acrobatics", "sleight of hand", "stealth"],
-    "constitution": [],
-    "intelligence": ["arcana", "history", "investigation", "nature", "religion"],
-    "wisdom": ["animal handling", "insight", "medicine", "perception", "survival"],
-    "charisma": ["deception", "intimidation", "performance", "persuasion"],
-}
-
-const blank_character = {
-    "theme": "",
-
-    "character_name": "",
-    "class": "",
-    "race": "",
-    "background": "",
-    "level": "",
-    "experience_points": "",
-    "alignment": "",
-
-    "strength": "",
-    "dexterity": "",
-    "constitution": "",
-    "intelligence": "",
-    "wisdom": "",
-    "charisma": "",
-    "saving_throws": [],
-    "skill_proficiencies": [],
-
-    "armor_class": "",
-    "speed": "",
-    "hit_point_maximum": "",
-    "current_hit_points": "",
-    "hit_dice": "",
-    "hit_dice_total": "",
-
-    "actions": [],
-
-    "spellcasting_ability": "",
-    "spells": [],
-}
-
-
 export default function App() {
+
+    const [character, setCharacter] = React.useState(() => getLocalData('character', blank_character) as Character);
+    const proficiency_bonus = getProficiencyBonus(character.level);
+    const spell_save_dc = (8 + calculateModifier(character[character.spellcasting_ability]) + proficiency_bonus);
+    const spell_attack_bonus = (getModifierDisplay(calculateModifier(character[character.spellcasting_ability]) + proficiency_bonus));
+
+    // Keep local storage up-to-date with state
+    React.useEffect(() => {
+        const stringified = JSON.stringify(character);
+        window.localStorage.setItem('character', stringified);
+    }, [character]);
 
     // Clears character stored in state/local storage
     const clearCharacter = (): void => {
-        setCharacter(blank_character);
+        setCharacter(blank_character as Character);
     }
 
     // Updates field in character state
@@ -73,7 +47,7 @@ export default function App() {
         setCharacter(character => ({
             ...character,
             ...updated_field
-        }));
+        }) as Character);
     }
 
     // Updates selected skill proficiencies in state
@@ -91,7 +65,7 @@ export default function App() {
         setCharacter(character => ({
             ...character,
             ...{"skill_proficiencies": current_proficiencies}
-        }));
+        }) as Character);
     }
 
     // Updates selected ability saving throws in state
@@ -109,11 +83,11 @@ export default function App() {
         setCharacter(character => ({
             ...character,
             ...{"saving_throws": current_saving_throws}
-        }));
+        }) as Character);
     }
 
     const rollRandomAbilities = (): void => {
-        const abilities = ["strength", "dexterity", "constitution", "intelligence", "wisdom", "charisma"];
+        const abilities = Object.keys(skill_map);
         abilities.forEach(ability => {
             const roll = rollArray(4,6);
             roll.sort();
@@ -125,7 +99,7 @@ export default function App() {
             setCharacter(character => ({
                 ...character,
                 ...obj
-            }));
+            }) as Character);
         })
     }
 
@@ -146,7 +120,7 @@ export default function App() {
             error_box.innerText = '';
         }
 
-        const new_spell = [{
+        const new_spell: Spell[] = [{
             name: form.spell_name.value,
             level: form.level.value,
             description: form.description.value
@@ -154,8 +128,8 @@ export default function App() {
 
         setCharacter(character => ({
             ...character,
-            ...{"spells": [...character.spells, ...new_spell]}
-        }));
+            ...{"spells": [...character.spells, ...new_spell] as Spell[]}
+        }) as Character);
 
         form.reset();
     }
@@ -167,8 +141,8 @@ export default function App() {
 
         setCharacter(character => ({
             ...character,
-            ...{"spells": spells}
-        }));
+            ...{"spells": spells as Spell[]}
+        }) as Character);
     }
 
     const addSpellFromApi = async (event: any): Promise<any> => {
@@ -188,18 +162,6 @@ export default function App() {
             description_input.value = spell_description;
         }
     }
-
-
-    const [character, setCharacter] = React.useState(() => getLocalData('character', blank_character));
-    const proficiency_bonus = getProficiencyBonus(character.level);
-    const spell_save_dc = (8 + calculateModifier(character[character.spellcasting_ability]) + proficiency_bonus);
-    const spell_attack_bonus = (getModifierDisplay(calculateModifier(character[character.spellcasting_ability]) + proficiency_bonus));
-
-    // Keep local storage up-to-date with state
-    React.useEffect(() => {
-        const stringified = JSON.stringify(character);
-        window.localStorage.setItem('character', stringified);
-    }, [character]);
 
 
     return (<>

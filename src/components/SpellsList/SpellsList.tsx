@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { ExpandBox } from '../Utils/Utils';
 
 
-export interface SpellsListProps {
+interface SpellsListProps {
     level: string|number;
     spells?: any[];
     removeSpell: (spell_name: string) => void;

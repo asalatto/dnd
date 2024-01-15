@@ -4,7 +4,7 @@ import { Input } from '../Utils/Utils';
 import { getApiData, ApiResults } from '../../utils';
 
 
-export interface SearchProps {
+interface SearchProps {
     name?: string;
     endpoint: string;
     value?: string;

@@ -9,7 +9,7 @@ import {
 } from "../../utils";
 
 
-export interface AbilityProps {
+interface AbilityProps {
     name?: string;
     value?: number|string;
     skills?: any[];
@@ -32,6 +32,7 @@ export default function Ability({
     updateSkillProficiency,
     updateSavingThrow
 }: AbilityProps) {
+    
     const modifier = calculateModifier(value as number);
     const modifier_display = value ? getModifierDisplay(modifier) : null;
     const saving_throw = saving_throws.includes(name) ? + (getProficiencyBonus(level) + modifier) : modifier;
