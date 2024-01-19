@@ -96,6 +96,7 @@
 
 .button--feature {
     display: inline-block;
+    margin: 1em;
     padding: 0.5em 1em;
     background-color: #fff;
     border-radius: 25px;
@@ -170,8 +171,7 @@
     }
 }
 
-.page {
-    h1, h2, h3 {
-        text-shadow: 1px 1px 1px rgba(#000, 0.2);
-    }
+.section-heading {
+    margin-top: 1.75em;
+    text-shadow: 1px 1px 1px rgba(#000, 0.2);
 }

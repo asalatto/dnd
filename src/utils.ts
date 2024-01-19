@@ -44,7 +44,6 @@ export function getApiItemDescription(endpoint: string, data: any): string {
         if (data.contents?.length > 0) {
             val += `Contains: ${data.contents.map(item => ` ${item.item.name}${item.quantity > 1 ? ` (${item.quantity})` :''}`)}. `; 
         }
-        val += data.quantity ? `(Quantity: ${data.quantity}) ` : '';
         val += data.desc ?? '';
     } else {
         val += data.desc;

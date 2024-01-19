@@ -5,25 +5,21 @@ import { ExpandBox } from '../Utils/Utils';
 
 interface SpellsListProps {
     level: string|number;
-    spells?: any[];
+    spells: any[];
     removeItem: (spell_name: string) => void;
 }
 
 export default function SpellsList({
     level,
-    spells=[],
+    spells,
     removeItem
 }: SpellsListProps) {
 
     const getSpells = (): any[] => {
-        if (spells.length == 0) {
-            return [];
-        } else {
-            return spells.map(spell => {
-                spell['editing'] = spell['editing'] || false;
-                return spell;
-            });
-        }
+        return spells.map(spell => {
+            spell['editing'] = spell['editing'] || false;
+            return spell;
+        });
     }
 
     const [spellboxes, setSpellboxes] = useState(() => getSpells());
