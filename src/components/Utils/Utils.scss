@@ -34,8 +34,8 @@
 
 .util-tooltip-icon {
     display: inline-block;
-    width: 15px;
-    height: 15px;
+    width: 14px;
+    height: 14px;
     margin: 0 4px;
     padding-top: 1px;
     border-radius: 15px;
@@ -44,6 +44,7 @@
     font-weight: bold;
     font-size: 12px;
     text-align: center;
+    line-height: 1;
 }
 
 .util-tooltip-message {

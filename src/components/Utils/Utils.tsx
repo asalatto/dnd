@@ -70,7 +70,13 @@ export function ExpandBox({
     return (
         <div {...props}>
             { expanded ? children : truncate(children) }
-            { children.length > (limit as number) ? <a onClick={() => setExpanded(!expanded)}>({expanded ? 'less' : 'more'})</a> : '' }
+            { 
+                (children.length > (limit as number)) ? 
+                    <a onClick={() => setExpanded(!expanded)}>
+                        ({expanded ? 'less' : 'more'})
+                    </a> 
+                : ''
+            }
         </div>
     )
 }

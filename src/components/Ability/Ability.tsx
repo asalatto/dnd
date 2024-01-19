@@ -1,11 +1,12 @@
 import "./Ability.scss";
 import { ChangeEvent } from "react";
-import { Input } from "../Utils/Utils";
+import { Input, Tooltip } from "../Utils/Utils";
 import {
     titleize, 
     calculateModifier, 
     getModifierDisplay, 
-    getProficiencyBonus
+    getProficiencyBonus,
+    getPassivePerception
 } from "../../utils";
 
 
@@ -75,6 +76,19 @@ export default function Ability({
                     )
                 })}
             </ul>
+            
+            { 
+                (name === 'wisdom') ? 
+                    <small style={{ whiteSpace: 'nowrap' }}>
+                        <Tooltip>10 + perception modifier</Tooltip><strong>Passive Perception: </strong>
+                        {getPassivePerception(
+                            value as number, 
+                            proficiencies.includes('perception'),
+                            level as number
+                        )}
+                    </small>
+                : ''
+            }
         </div>
     )
 }
