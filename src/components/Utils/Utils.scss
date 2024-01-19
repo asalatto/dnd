@@ -9,6 +9,13 @@
     input, select {
         width: 100%;
     }
+    &.block {
+        display: block;
+    }
+    &.small {
+        padding: 5px;
+        font-size: 85%;
+    }
 }
 
 .util-tooltip {

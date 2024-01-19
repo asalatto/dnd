@@ -205,21 +205,22 @@ export default function App() {
                     </div>
                 </div>
                 <section className="sheet-section">
-                    <Input name="character_name" onChange={updateCharacter} value={character.character_name} />
-                    <Input name="class" onChange={updateCharacter} value={character.class} />
-                    <Input name="race" onChange={updateCharacter} value={character.race} />
-                    <Input name="background" onChange={updateCharacter} value={character.background} />
-                    <Input name="level" onChange={updateCharacter} value={character.level} />
-                    <Input name="experience_points" onChange={updateCharacter} value={character.experience_points} />
-                    <Input name="alignment" onChange={updateCharacter} value={character.alignment} />
-                    <Input name="speed" onChange={updateCharacter} value={character.speed} />
+                    <Input layout="small" onChange={updateCharacter} name="character_name" value={character.character_name} />
+                    <Input layout="small" onChange={updateCharacter} name="class" value={character.class} />
+                    <Input layout="small" onChange={updateCharacter} name="race" value={character.race} />
+                    <Input layout="small" onChange={updateCharacter} name="background" value={character.background} />
+                    <Input layout="small" onChange={updateCharacter} name="level" type="number" value={character.level} />
+                    <Input layout="small" onChange={updateCharacter} name="experience_points" type="number" value={character.experience_points} />
+                    <Input layout="small" onChange={updateCharacter} name="alignment" value={character.alignment} />
+                    <Input layout="small" onChange={updateCharacter} name="hit_dice" value={character.hit_dice} />
+                    <Input layout="small" onChange={updateCharacter} name="hit_dice_total" value={character.hit_dice_total} />
                 </section>
                 <br/>
                 <section className="sheet-section">
-                    <Input name="armor_class" onChange={updateCharacter} value={character.armor_class} tooltip="Base is 10 + dexterity modifier" />
-                    <Input name="hit_point_maximum" onChange={updateCharacter} value={character.hit_point_maximum} />
-                    <Input name="hit_dice" onChange={updateCharacter} value={character.hit_dice} />
-                    <Input name="hit_dice_total" onChange={updateCharacter} value={character.hit_dice_total} />
+                    <Input onChange={updateCharacter} name="armor_class" value={character.armor_class} tooltip="Base is 10 + dexterity modifier" />
+                    <Input onChange={updateCharacter} name="hit_point_current" type="number" value={character.hit_point_current} />
+                    <Input onChange={updateCharacter} name="hit_point_maximum" type="number" min={0} value={character.hit_point_maximum} />
+                    <Input onChange={updateCharacter} name="speed" value={character.speed} />
                 </section>
 
                 <div className="flex space-between">
@@ -263,7 +264,7 @@ export default function App() {
                     {character.currency.map(cur => {
                         return (
                             <label key={cur.name} style={{ width: '16%' }}>
-                                <input type="number" name={cur.name} style={{ width: '75%' }} placeholder={cur.name} value={cur.amount} onChange={updateCurrency}/> {cur.label}
+                                <input type="number" name={cur.name} min="0" style={{ width: '75%' }} placeholder={cur.name} value={cur.amount} onChange={updateCurrency}/> {cur.label}
                             </label>
                         )
                     })}

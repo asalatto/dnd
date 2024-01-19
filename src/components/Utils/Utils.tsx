@@ -19,27 +19,33 @@ export function Tooltip({
 
 interface InputProps {
     name?: string;
+    type?: "text"|"number";
+    layout?: string;
     tooltip?: string;
     id?: string;
     input_classes?: string;
     value?: string|number;
     label?: string;
+    min?: number;
+    max?: number;
     onChange?: (event: any) => void;
     readOnly?: boolean;
 }
 export function Input({
     name="",
+    type="text",
+    layout="",
     tooltip,
     input_classes="",
     ...props
 }: InputProps) {
     return (
-        <div className="util-text-input">
+        <div className={`util-text-input ${layout}`}>
             <label htmlFor={name}>
                 {titleize(name)}
                 {tooltip ? <Tooltip>{tooltip}</Tooltip> : ''}
             </label>
-            <input className={input_classes} type="text" id={name} name={name} {...props}></input>
+            <input type={type} className={input_classes} id={name} name={name} {...props}></input>
         </div>
     )
 }

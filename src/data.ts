@@ -12,7 +12,7 @@ interface Equipment {
 interface Currency {
     name: string;
     label: string;
-    amount: number;
+    amount: number|"";
 }
 
 export interface Character {
@@ -34,7 +34,8 @@ export interface Character {
     skill_proficiencies: string[];
     armor_class: number|"";
     speed: string;
-    hit_point_maximum: string|number;
+    hit_point_maximum: number|"";
+    hit_point_current: number|"";
     current_hit_points: string|number;
     hit_dice: string|number;
     hit_dice_total: string|number;
@@ -64,6 +65,7 @@ export const blank_character: Character = {
     "armor_class": "",
     "speed": "",
     "hit_point_maximum": "",
+    "hit_point_current": "",
     "current_hit_points": "",
     "hit_dice": "",
     "hit_dice_total": "",
@@ -71,11 +73,11 @@ export const blank_character: Character = {
     "spells": [],
     "equipment": [],
     "currency": [
-        {"name": "copper", "label": "CP", "amount": 0},
-        {"name": "silver", "label": "SP", "amount": 0},
-        {"name": "electrum", "label": "EP", "amount": 0},
-        {"name": "gold", "label": "GP", "amount": 0},
-        {"name": "platinum", "label": "PP", "amount": 0},
+        {"name": "copper", "label": "CP", "amount": ""},
+        {"name": "silver", "label": "SP", "amount": ""},
+        {"name": "electrum", "label": "EP", "amount": ""},
+        {"name": "gold", "label": "GP", "amount": ""},
+        {"name": "platinum", "label": "PP", "amount": ""},
     ]
 }
 

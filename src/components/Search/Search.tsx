@@ -55,10 +55,12 @@ export default function Search({
         setFilteredOptions([]);
     }
 
+    const display = filteredOptions.length > 0 ? 'block' : 'none';
+
     return (
         <div className="search-input" data-endpoint={endpoint}>
             <Input input_classes="form-field" id={name} name={name} onChange={getFilteredData} value={chosen} {...props} />
-            <div className="search-options">
+            <div className="search-options" style={{ display: display }}>
                 {
                     filteredOptions?.map(opt => {
                         return <a key={opt.index} data-index={opt.index} id={name} onClick={selectOption}>{opt.name}</a>;
