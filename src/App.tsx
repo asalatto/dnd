@@ -144,7 +144,6 @@ export default function App() {
                 new_item[field.name] = field.value;
             }
         })
-        console.log(new_item)
 
         const character_copy = JSON.parse(JSON.stringify(character));
         character_copy[key] = [...character[key], ...[new_item]];
@@ -178,16 +177,16 @@ export default function App() {
         setCharacter(character_copy as Character);
     }
 
-    const addItemFromApi = async (event: any): Promise<any> => {
+    const addItemFromApi = async (event: any, url: string): Promise<any> => {
         const data_index = event.target.getAttribute('data-index');
-        if (!data_index) {
+        if (!url) {
             return;
         }
 
         const form = event.target.closest('form');
         const fields = form.querySelectorAll('.form-field');
         const endpoint = event.target.closest('.search-input').getAttribute('data-endpoint');
-        const data = await getApiData(`${endpoint}/${data_index}`);
+        const data = await getApiData(url);
 
         fields.forEach(field => {
             if (field.name === 'item_name') {
@@ -198,9 +197,14 @@ export default function App() {
             if (field.name === 'quantity' && !data[field.name]) {
                 val = 1;
             } else if (field.name === 'category') {
-                const category = data.equipment_category.name.toLowerCase();
-                if (category.includes('weapon') || category.includes('armor') || category.includes('shield')) {
+                const category = data.equipment_category.index;
+                const equipment_categories = ['armor', 'heavy-armor', 'light-armor', 'martial-melee-weapons', 'martial-ranged-weapons', 'martial-weapons', 'medium-armor', 'melee-weapons', 'ranged-weapons', 'shields', 'simple-melee-weapons', 'simple-ranged-weapons', 'simple-weapons', 'weapon'];
+                const magic_categories = ['ring', 'rod', 'staff', 'wand', 'wondrous-items'];
+
+                if (equipment_categories.includes(category)) {
                     val = 'equipment';
+                } else if (magic_categories.includes(category)) {
+                    val = 'magic';
                 } else {
                     val = 'inventory';
                 }
@@ -302,8 +306,9 @@ export default function App() {
                         <option value="" disabled>Equipment category</option>
                         <option value="equipment">Weapons &amp; Armor</option>
                         <option value="inventory">Inventory</option>
+                        <option value="magic">Magic</option>
                     </select>
-                    <Search name="item_name" endpoint="equipment" updateFunction={addItemFromApi} placeholder="Equipment name" />
+                    <Search name="item_name" endpoint={['equipment', 'magic-items']} updateFunction={addItemFromApi} placeholder="Equipment name" />
                     <input type="number" min="0" className="form-field" name="quantity" placeholder="Amt" style={{ width: '75px' }} />
                     <textarea className="form-field" name="description" rows={1} cols={40} placeholder="Details" style={{ margin: '4px 14px' }}></textarea>
                     <input type="submit" value="Save" />
@@ -311,7 +316,7 @@ export default function App() {
                 </form>
                 <div className="item-list-container">
                     {
-                        ['equipment', 'inventory'].map(category => {
+                        ['equipment', 'inventory', 'magic'].map(category => {
                             const equipment = character.equipment.filter(item => item.category == category);
                             if (equipment.length > 0) {
                                 return <ItemList 
@@ -355,7 +360,7 @@ export default function App() {
                             })
                         }
                     </select>
-                    <Search name="item_name" endpoint="spells" updateFunction={addItemFromApi} placeholder="Spell name" />
+                    <Search name="item_name" endpoint={['spells']} updateFunction={addItemFromApi} placeholder="Spell name" />
                     <textarea className="form-field" name="description" rows={1} cols={40} placeholder="Effects &amp; details"></textarea>
                     <input type="submit" value="Save" />
                     <div className="error"></div>

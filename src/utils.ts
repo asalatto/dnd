@@ -1,11 +1,3 @@
-/* Interfaces */
-
-export interface ApiResults {
-    count: number;
-    results: any[];
-}
-
-
 /* Functions */
 
 // Returns a string in title-case
@@ -23,7 +15,7 @@ export function getLocalData(key: string, defaultData: any): any {
 }
 
 // Gets data from DnD 5e API endpoint
-export async function getApiData(endpoint) {
+export async function getApiData(endpoint: string) {
     return fetch(`https://www.dnd5eapi.co/api/${endpoint}`).then((response) => response.json())
 }
 

@@ -1,14 +1,14 @@
 import './index.scss';
 import { useState, useEffect, ChangeEvent } from 'react';
 import { Input } from '../Utils';
-import { getApiData, ApiResults } from '../../utils';
+import { getApiData } from '../../utils';
 
 
 interface SearchProps {
     name?: string;
-    endpoint: string;
+    endpoint: string[];
     value?: string;
-    updateFunction: (event: any) => Promise<any>;
+    updateFunction: (event: any, url: string) => Promise<any>;
     placeholder: string;
 }
 
@@ -20,27 +20,37 @@ export default function Search({
     ...props
 }: SearchProps) {
 
-    const [data, setData] = useState({} as ApiResults);
+    const [data, setData] = useState<any[]>([]);
     const [filteredOptions, setFilteredOptions] = useState<any[]>([]);
     const [chosen, setChosen] = useState(value);
 
     useEffect(() => {
-        getApiData(endpoint).then(data => setData(data));
+        getData();
     }, [])
 
-    const getFilteredData = (event: ChangeEvent): void => {
+    const getData = async () => {
+        let all_data = [];
+        for (const path of endpoint) {
+            await getApiData(path).then(resp => {
+                all_data = [...all_data, ...resp.results];
+            });
+        }
+        setData(all_data);
+    }
+
+    const getFilteredData = (event: ChangeEvent, url: string): void => {
         const element = event.target as HTMLInputElement;
         const query = element.value;
-        const results = data?.results || null;
+        const results = data ?? null;
 
-        updateFunction(event);
+        // updateFunction(event, url);
         setChosen(query);
 
         if (!query) {
             setFilteredOptions([]);
             return;
         }
-        if (!data) {
+        if (data.length === 0) {
             return;
         }
 
@@ -48,9 +58,9 @@ export default function Search({
         setFilteredOptions(filtered_results);
     }
 
-    const selectOption = (event) => {
+    const selectOption = (event, url: string) => {
         const clicked = event.target.innerText.trim();
-        updateFunction(event);
+        updateFunction(event, url);
         setChosen(clicked);
         setFilteredOptions([]);
     }
@@ -59,11 +69,16 @@ export default function Search({
 
     return (
         <div className="search-input" data-endpoint={endpoint}>
-            <Input input_classes="form-field" id={name} name={name} onChange={getFilteredData} value={chosen} {...props} />
+            <Input input_classes="form-field" id={name} name={name} onChange={(event) => getFilteredData(event, ``)} value={chosen} {...props} />
             <div className="search-options" style={{ display: display }}>
                 {
                     filteredOptions?.map(opt => {
-                        return <a key={opt.index} data-index={opt.index} id={name} onClick={selectOption}>{opt.name}</a>;
+                        return <a 
+                            key={opt.index}
+                            data-index={opt.index}
+                            id={name}
+                            onClick={(event) => selectOption(event, opt.url.replace('/api/', ''))}
+                        >{opt.name}</a>;
                     })
                 }
             </div>

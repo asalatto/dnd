@@ -77,7 +77,7 @@ export default function ItemList({
                                         (item.quantity) ? 
                                             <>
                                                 <label>Quantity: </label>
-                                                <input type="number" name='quantity' defaultValue={item.quantity} min="0" placeholder="Quantity" />
+                                                <input className="form-field" type="number" name="quantity" defaultValue={item.quantity} min="0" placeholder="Quantity" />
                                             </>
                                         : ''
                                     }

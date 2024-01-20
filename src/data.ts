@@ -7,7 +7,7 @@ interface Spell {
 
 interface Equipment {
     name: string;
-    category: "equipment"|"inventory";
+    category: "equipment"|"inventory"|"magic";
     quantity: number;
     description: string;
     editing: boolean;
