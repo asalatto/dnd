@@ -2,12 +2,15 @@ interface Spell {
     name: string;
     level: number;
     description: string;
+    editing: boolean;
 }
 
 interface Equipment {
     name: string;
+    category: "equipment"|"inventory";
     quantity: number;
     description: string;
+    editing: boolean;
 }
 
 interface Currency {

@@ -1,6 +1,6 @@
-import "./Ability.scss";
+import "./index.scss";
 import { ChangeEvent } from "react";
-import { Input, Tooltip } from "../Utils/Utils";
+import { Input, Tooltip } from "../Utils";
 import {
     titleize, 
     calculateModifier, 
@@ -76,9 +76,9 @@ export default function Ability({
                     )
                 })}
             </ul>
-            
+
             { 
-                (name === 'wisdom') ? 
+                (name === 'wisdom' && value) ? 
                     <small style={{ whiteSpace: 'nowrap' }}>
                         <Tooltip>10 + perception modifier</Tooltip><strong>Passive Perception: </strong>
                         {getPassivePerception(

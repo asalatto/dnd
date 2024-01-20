@@ -1,4 +1,4 @@
-import "./Utils.scss";
+import "./index.scss";
 import { useState } from "react";
 import { titleize } from "../../utils";
 
@@ -45,7 +45,7 @@ export function Input({
                 {titleize(name)}
                 {tooltip ? <Tooltip>{tooltip}</Tooltip> : ''}
             </label>
-            <input type={type} className={input_classes} id={name} name={name} {...props}></input>
+            <input type={type} className={input_classes} id={name} name={name} autoComplete="off" {...props} />
         </div>
     )
 }
