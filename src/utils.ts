@@ -22,7 +22,7 @@ export async function getApiData(endpoint: string) {
 // Parses the DnD 5e API's response description based on request type 
 export function getApiItemDescription(endpoint: string, data: any): string {
     let val = '';
-    const description = data.desc.join(" ");
+    const description = data.desc.join(" — ");
 
     if (endpoint === 'spells') {
         val += `(Range: ${data.range}) ${description} ${data.higher_level ?? ''}`;
