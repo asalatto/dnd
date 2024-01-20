@@ -33,9 +33,15 @@ export default function App() {
         window.localStorage.setItem('character', stringified);
     }, [character]);
 
-    // Clears character stored in state/local storage
-    const clearCharacter = (): void => {
-        setCharacter(blank_character as Character);
+    // Clears character, or key on character, stored in state/local storage
+    const clear = (category?: string): void => {
+        if (category) {
+            const character_copy = JSON.parse(JSON.stringify(character));
+            character_copy[category] = [];
+            setCharacter(character_copy as Character);
+        } else {
+            setCharacter(blank_character as Character);
+        }
     }
 
     // Updates field in character state
@@ -227,7 +233,7 @@ export default function App() {
                 <div className="flex space-between">
                     <div className="flex">
                         <h1 style={{display: 'inline-block'}}>Character{character.character_name ? `: ${character.character_name}` : ''}</h1>
-                        <button className="clear-button" onClick={clearCharacter}>Clear</button>
+                        <button className="clear-button" onClick={() => clear()}>Clear</button>
                     </div>
                     <div>
                         <label htmlFor="theme">Theme: </label>
@@ -289,7 +295,10 @@ export default function App() {
                     }
                 </section>
 
-                <h2 className="section-heading">Equipment &amp; Inventory</h2>
+                <div className="flex section-heading">
+                    <h2 style={{display: 'inline-block'}}>Equipment &amp; Inventory</h2>
+                    <button className="clear-button" onClick={() => clear('equipment')}>Clear</button>
+                </div>
                 <section className="sheet-section flex space-around">
                     <div>Currency:</div>
                     {character.currency.map(cur => {
@@ -331,7 +340,10 @@ export default function App() {
                     }
                 </div>
 
-                <h2 className="section-heading">Spells &amp; Cantrips</h2>
+                <div className="flex section-heading">
+                    <h2 style={{display: 'inline-block'}}>Spells &amp; Cantrips</h2>
+                    <button className="clear-button" onClick={() => clear('spells')}>Clear</button>
+                </div>
                 <section className="sheet-section">
                     <div className="flex">
                         <div className="util-text-input">
