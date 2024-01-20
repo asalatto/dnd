@@ -303,8 +303,9 @@ export default function App() {
                     <div>Currency:</div>
                     {character.currency.map(cur => {
                         return (
-                            <label key={cur.name} style={{ width: '16%' }}>
-                                <input type="number" name={cur.name} min="0" style={{ width: '75%' }} placeholder={cur.name} value={cur.amount} onChange={updateCurrency}/> {cur.label}
+                            <label className="flex" key={cur.name} style={{ width: '16%' }}>
+                                <img width="20" height="20" src={`${process.env.PUBLIC_URL}/images/${cur.name}.png`} alt={`${cur.name} piece`} />
+                                <input type="number" name={cur.name} min="0" style={{ width: '65%', margin: '0 4px' }} placeholder={cur.name} value={cur.amount} onChange={updateCurrency} /> {cur.label}
                             </label>
                         )
                     })}
@@ -313,9 +314,9 @@ export default function App() {
                     <label>Add Equipment: </label>
                     <select className="form-field" name="category">
                         <option value="" disabled>Equipment category</option>
-                        <option value="equipment">Weapons &amp; Armor</option>
                         <option value="inventory">Inventory</option>
                         <option value="magic">Magic</option>
+                        <option value="equipment">Weapons &amp; Armor</option>
                     </select>
                     <Search name="item_name" endpoint={['equipment', 'magic-items']} updateFunction={addItemFromApi} placeholder="Equipment name" />
                     <input type="number" min="0" className="form-field" name="quantity" placeholder="Amt" style={{ width: '75px' }} />
