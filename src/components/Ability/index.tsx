@@ -18,8 +18,7 @@ interface AbilityProps {
     saving_throws?: any[];
     level?: number;
     updateCharacter?: (event: any) => void;
-    updateSkillProficiency?: (event: any) => void;
-    updateSavingThrow?: (event: ChangeEvent) => void;
+    updateList?: (event: ChangeEvent, key: string) => void;
 }
 
 export default function Ability({
@@ -30,8 +29,7 @@ export default function Ability({
     saving_throws=[],
     level=1,
     updateCharacter,
-    updateSkillProficiency,
-    updateSavingThrow
+    updateList,
 }: AbilityProps) {
     
     const modifier = calculateModifier(value as number);
@@ -48,7 +46,7 @@ export default function Ability({
                     <input 
                         type="checkbox"
                         value={name}
-                        onChange={updateSavingThrow}
+                        onChange={(event) => updateList(event, 'saving_throws')}
                         checked={saving_throws.includes(name)}
                     /> 
                     saving throw {saving_throw_display}
@@ -65,7 +63,8 @@ export default function Ability({
                             <input 
                                 type="checkbox"
                                 id={skill}
-                                onChange={updateSkillProficiency}
+                                value={skill}
+                                onChange={(event) => updateList(event, 'skill_proficiencies')}
                                 checked={proficiencies.includes(skill)}
                             /> 
                             <label htmlFor={skill}>

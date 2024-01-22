@@ -73,13 +73,13 @@ export function getProficiencyBonus(level: number) {
     return bonus;
 }
 
-// Roll a d# (ex d8, d20)
+// Roll a d# (ex d8, d20) and return result
 export function d(num: number = 20): number {
     return Math.floor(Math.random() * num + 1);
 }
 
-// Roll a dice an amount of times, #d# (ex 2d6, 5d10) and return total
-export function roll(times: number, die: number): number {
+// Roll a die an amount of times, #d# (ex 2d6, 5d10), and return total
+export function rollForTotal(times: number, die: number): number {
     let total = 0;
     for (let i = 0; i < times; i++) {
         total += d(die);
@@ -87,9 +87,9 @@ export function roll(times: number, die: number): number {
     return total;
 }
 
-// Roll a dice an amount of times, #d# (ex 2d6, 5d10) and return array of totals
-export function rollArray(times: number, die: number): number[] {
-    let array = [];
+// Roll a die an amount of times, #d# (ex 2d6, 5d10), and return an array of each result
+export function rollForArray(times: number, die: number): number[] {
+    const array = [];
     for (let i = 0; i < times; i++) {
         array.push(d(die));
     }
@@ -101,4 +101,45 @@ export function getPassivePerception(wisdom: number, proficiency: boolean, level
     const wisdom_modifier = calculateModifier(wisdom);
     const perception_modifier = proficiency ? (getProficiencyBonus(level) + wisdom_modifier) : wisdom_modifier;
     return 10 + perception_modifier;
+}
+
+// Used by the Search component to fill in details of a selected item from the DnD 5e API
+export async function addItemFromApi(event: any, url: string): Promise<any> {
+    if (!url) {
+        return;
+    }
+
+    const form = event.target.closest('form');
+    const fields = form.querySelectorAll('.form-field');
+    const endpoint = event.target.closest('.search-input').getAttribute('data-endpoint');
+    const data = await getApiData(url);
+
+    fields.forEach(field => {
+        if (field.name === 'item_name') {
+            return;
+        }
+
+        let val;
+        if (field.name === 'quantity' && !data[field.name]) {
+            val = 1;
+        } else if (field.name === 'category') {
+            const category = data.equipment_category.index;
+            const equipment_categories = ['armor', 'heavy-armor', 'light-armor', 'martial-melee-weapons', 'martial-ranged-weapons', 'martial-weapons', 'medium-armor', 'melee-weapons', 'ranged-weapons', 'shields', 'simple-melee-weapons', 'simple-ranged-weapons', 'simple-weapons', 'weapon'];
+            const magic_categories = ['ring', 'rod', 'staff', 'wand', 'wondrous-items'];
+
+            if (equipment_categories.includes(category)) {
+                val = 'equipment';
+            } else if (magic_categories.includes(category)) {
+                val = 'magic';
+            } else {
+                val = 'inventory';
+            }
+        } else if (field.name === 'description') {
+            val = getApiItemDescription(endpoint, data);
+        } else {
+            val = data[field.name];
+        }
+
+        form.querySelector(`[name="${field.name}"]`).value = val;
+    })
 }

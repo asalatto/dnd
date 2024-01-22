@@ -11,12 +11,11 @@ import {
 } from './data';
 import { 
     getLocalData, 
-    getApiData, 
     calculateModifier, 
     getModifierDisplay, 
     getProficiencyBonus, 
-    rollArray,
-    getApiItemDescription
+    rollForArray,
+    addItemFromApi
 } from './utils';
 
 
@@ -46,83 +45,55 @@ export default function App() {
 
     // Updates field in character state
     const updateCharacter = (event: any): void => {
-        const updated_field = {};
-        const val = event.target.value || event.target.innerText.trim();
-        updated_field[event.target.id] = val;
+        const character_copy = JSON.parse(JSON.stringify(character));
+        const field = event.target.id;
+        const value = event.target.value || event.target.innerText.trim();
 
-        setCharacter(character => ({
-            ...character,
-            ...updated_field
-        }) as Character);
+        character_copy[field] = value;
+        setCharacter(character_copy as Character);
     }
 
     const updateCurrency = (event: any): void => {
-        const copied_currency = character.currency;
-        const this_currency = copied_currency.find(cur => cur.name === event.target.name);
+        const character_copy = JSON.parse(JSON.stringify(character));
+        const this_currency = character_copy.currency.find(cur => cur.name === event.target.name);
+        
         this_currency['amount'] = event.target.value; 
-
-        setCharacter(character => ({
-            ...character,
-            ...{"currency": copied_currency}
-        }) as Character);
+        setCharacter(character_copy as Character);
     }
 
-    // Updates selected skill proficiencies in state
-    const updateSkillProficiency = (event: React.ChangeEvent): void => {
+    // Updates checkbox-selected proficiencies in state
+    const updateCheckboxList = (event: React.ChangeEvent, key: string): void => {
+        const character_copy = JSON.parse(JSON.stringify(character));
+        const current_list = character_copy[key];
         const element = event.target as HTMLInputElement;
-        const skill = element.id;
-        const current_proficiencies = character.skill_proficiencies;
+        const value = element.value;
 
-        if (element.checked && !current_proficiencies.includes(skill)) {
-            current_proficiencies.push(skill);
-        } else if (!element.checked && current_proficiencies.includes(skill)) {
-            current_proficiencies.splice(current_proficiencies.indexOf(skill), 1);
+        if (element.checked && !current_list.includes(value)) {
+            current_list.push(value);
+        } else if (!element.checked && current_list.includes(value)) {
+            current_list.splice(current_list.indexOf(value), 1);
         }
-
-        setCharacter(character => ({
-            ...character,
-            ...{"skill_proficiencies": current_proficiencies}
-        }) as Character);
-    }
-
-    // Updates selected ability saving throws in state
-    const updateSavingThrow = (event: React.ChangeEvent): void => {
-        const element = event.target as HTMLInputElement;
-        const ability = element.value;
-        const current_saving_throws = character.saving_throws;
-
-        if (element.checked && !current_saving_throws.includes(ability)) {
-            current_saving_throws.push(ability);
-        } else if (!element.checked && current_saving_throws.includes(ability)) {
-            current_saving_throws.splice(current_saving_throws.indexOf(ability), 1);
-        }
-
-        setCharacter(character => ({
-            ...character,
-            ...{"saving_throws": current_saving_throws}
-        }) as Character);
+        setCharacter(character_copy as Character);
     }
 
     const rollRandomAbilities = (): void => {
+        const character_copy = JSON.parse(JSON.stringify(character));
         const abilities = Object.keys(skill_map);
+
         abilities.forEach(ability => {
-            const roll = rollArray(4,6);
+            const roll = rollForArray(4,6);
             roll.sort();
             roll.shift();
             const total = roll.reduce((sum, add) => sum + add, 0);
-            const obj = {};
-            obj[ability] = total;
-
-            setCharacter(character => ({
-                ...character,
-                ...obj
-            }) as Character);
+            character_copy[ability] = total;
         })
+        setCharacter(character_copy as Character);
     }
 
     const saveItem = (event: any, key: string): void => {
         event.preventDefault();
-        
+
+        const character_copy = JSON.parse(JSON.stringify(character));
         const form = event.target;
         const fields = form.querySelectorAll('.form-field');
         const error_box = form.querySelector('.error') as HTMLElement;
@@ -151,78 +122,26 @@ export default function App() {
             }
         })
 
-        const character_copy = JSON.parse(JSON.stringify(character));
         character_copy[key] = [...character[key], ...[new_item]];
-
         setCharacter(character_copy as Character);
 
         form.reset();
     }
 
-    const editItem = (item_name: string, key: string, new_item: object): void => {
+    const editItem = (item_name: string, key: string, action: 'edit'|'remove', new_item?: object): void => {
         const character_copy = JSON.parse(JSON.stringify(character));
         const list = character_copy[key];
         const item_index = list.findIndex(item => item.name === item_name);
 
-        // Update object fields rather than overwrite object
-        for (const [field, value] of Object.entries(new_item)) {
-            list[item_index][field] = value;
-        }
-
-        setCharacter(character_copy as Character);
-    }
-    
-    const removeItem = (item_name: string, key: string): void => {
-        const items = character[key];
-        const item_index = items.findIndex(item => item.name == item_name);
-        items.splice(item_index, 1);
-
-        const character_copy = JSON.parse(JSON.stringify(character));
-        character_copy[key] = items;
-
-        setCharacter(character_copy as Character);
-    }
-
-    const addItemFromApi = async (event: any, url: string): Promise<any> => {
-        const data_index = event.target.getAttribute('data-index');
-        if (!url) {
-            return;
-        }
-
-        const form = event.target.closest('form');
-        const fields = form.querySelectorAll('.form-field');
-        const endpoint = event.target.closest('.search-input').getAttribute('data-endpoint');
-        const data = await getApiData(url);
-
-        fields.forEach(field => {
-            if (field.name === 'item_name') {
-                return;
+        if (action === 'remove') {
+            list.splice(item_index, 1);
+            character_copy[key] = list;
+        } else {
+            for (const [field, value] of Object.entries(new_item)) {
+                list[item_index][field] = value;
             }
-
-            let val;
-            if (field.name === 'quantity' && !data[field.name]) {
-                val = 1;
-            } else if (field.name === 'category') {
-                const category = data.equipment_category.index;
-                const equipment_categories = ['armor', 'heavy-armor', 'light-armor', 'martial-melee-weapons', 'martial-ranged-weapons', 'martial-weapons', 'medium-armor', 'melee-weapons', 'ranged-weapons', 'shields', 'simple-melee-weapons', 'simple-ranged-weapons', 'simple-weapons', 'weapon'];
-                const magic_categories = ['ring', 'rod', 'staff', 'wand', 'wondrous-items'];
-
-                if (equipment_categories.includes(category)) {
-                    val = 'equipment';
-                } else if (magic_categories.includes(category)) {
-                    val = 'magic';
-                } else {
-                    val = 'inventory';
-                }
-            } else if (field.name === 'description') {
-                val = getApiItemDescription(endpoint, data);
-            } else {
-                val = data[field.name];
-            }
-
-            form.querySelector(`[name="${field.name}"]`).value = val;
-        })
-        
+        }
+        setCharacter(character_copy as Character);
     }
 
 
@@ -287,8 +206,7 @@ export default function App() {
                                 saving_throws={character.saving_throws}
                                 level={character.level}
                                 updateCharacter={updateCharacter} 
-                                updateSkillProficiency={updateSkillProficiency} 
-                                updateSavingThrow={updateSavingThrow}
+                                updateList={updateCheckboxList} 
                                 value={character[skill]} 
                             />
                         })
@@ -334,8 +252,7 @@ export default function App() {
                                     item_type="equipment"
                                     item_category={category} 
                                     items={equipment} 
-                                    editItem={editItem}
-                                    removeItem={(event) => removeItem(event, 'equipment')} />
+                                    editItem={editItem} />
                             }
                         }) 
                     }
@@ -389,8 +306,7 @@ export default function App() {
                                     item_type="spells"
                                     item_category={lvl} 
                                     items={spells} 
-                                    editItem={editItem}
-                                    removeItem={(event) => removeItem(event, 'spells')} />
+                                    editItem={editItem} />
                             }
                         }) 
                     }
