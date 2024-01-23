@@ -71,13 +71,11 @@ export default function ItemList({
                                             <a className="button red" onClick={() => editItem(item.name, item_type, 'remove')}>remove</a>
                                         </span>
                                     </div>
-                                    {
-                                        (item.quantity) ? 
-                                            <>
-                                                <label>Quantity: </label>
-                                                <input className="form-field" type="number" name="quantity" defaultValue={item.quantity} min="0" placeholder="Quantity" />
-                                            </>
-                                        : ''
+                                    {item.quantity && 
+                                        <>
+                                            <label>Quantity: </label>
+                                            <input className="form-field" type="number" name="quantity" defaultValue={item.quantity} min="0" placeholder="Quantity" />
+                                        </>
                                     }
                                     <textarea className="form-field" name="description" defaultValue={item.description} style={{ width: '100%', height: '100px', fontSize: '90%' }} />
                                 </form>
@@ -86,7 +84,7 @@ export default function ItemList({
                                     <div className="flex space-between">
                                         <span>
                                             <strong>{item.name}</strong>
-                                            {item.quantity ? ` (${item.quantity})` : ''}
+                                            {item.quantity && ` (${item.quantity})`}
                                         </span>
                                         <span>
                                             <a className="button" onClick={() => switchMode(item.name)}>edit</a>

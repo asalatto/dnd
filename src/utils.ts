@@ -21,21 +21,28 @@ export async function getApiData(endpoint: string) {
 
 // Parses the DnD 5e API's response description based on request type 
 export function getApiItemDescription(endpoint: string, data: any): string {
+    console.log(endpoint)
     let val = '';
     const description = data.desc.join(" — ");
 
     if (endpoint === 'spells') {
         val += `(Range: ${data.range}) ${description} ${data.higher_level ?? ''}`;
-    } else if (endpoint === 'equipment') {
+    } else if (endpoint.includes('equipment')) {
         if (data.equipment_category.index === 'weapon') {
-            val += `${data.category_range} weapon (${data.damage.damage_dice} ${data.damage.damage_type.name} damage). `;
+            val += `${data.category_range} weapon `;
+            val += `(${data.damage.damage_dice} ${data.damage.damage_type.name} damage). `;
             if (data.range) {
-                val += `Range ${data.range.normal}${data.range.long ? `/${data.range.long}` : ''}. `;
+                val += `Range ${data.range.normal}${data.range.long && `/${data.range.long}`}. `;
             }
         } 
+
         if (data.contents?.length > 0) {
-            val += `Contains: ${data.contents.map(item => ` ${item.item.name}${item.quantity > 1 ? ` (${item.quantity})` :''}`)}. `; 
+            const quantity = data.contents.map(item => {
+                return ` ${item.item.name}${item.quantity > 1 && ` (${item.quantity})`}`
+            });
+            val += `Contains: ${quantity}. `; 
         }
+
         val += description ?? '';
     } else {
         val += description;

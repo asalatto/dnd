@@ -12,7 +12,8 @@ body {
 input[type="text"], input[type="number"], select, textarea {
     padding: 5px;
     border-radius: 2px;
-    border: 1px solid #aaa;
+    border: 0;
+    border-bottom: 1px solid rgba(#000, 0.3);
     font-size: 110%;
     line-height: 1.25;
     &[readonly] {

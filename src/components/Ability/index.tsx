@@ -76,17 +76,15 @@ export default function Ability({
                 })}
             </ul>
 
-            { 
-                (name === 'wisdom' && value) ? 
-                    <small style={{ whiteSpace: 'nowrap' }}>
-                        <Tooltip>10 + perception modifier</Tooltip><strong>Passive Perception: </strong>
-                        {getPassivePerception(
-                            value as number, 
-                            proficiencies.includes('perception'),
-                            level as number
-                        )}
-                    </small>
-                : ''
+            { (name === 'wisdom' && value) && 
+                <small style={{ whiteSpace: 'nowrap' }}>
+                    <Tooltip>10 + perception modifier</Tooltip><strong>Passive Perception: </strong>
+                    {getPassivePerception(
+                        value as number, 
+                        proficiencies.includes('perception'),
+                        level as number
+                    )}
+                </small>
             }
         </div>
     )

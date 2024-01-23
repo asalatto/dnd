@@ -43,7 +43,7 @@ export function Input({
         <div className={`util-text-input ${layout}`}>
             <label htmlFor={name}>
                 {titleize(name)}
-                {tooltip ? <Tooltip>{tooltip}</Tooltip> : ''}
+                {tooltip && <Tooltip>{tooltip}</Tooltip>}
             </label>
             <input type={type} className={input_classes} id={name} name={name} autoComplete="off" {...props} />
         </div>
@@ -70,12 +70,10 @@ export function ExpandBox({
     return (
         <div {...props}>
             { expanded ? children : truncate(children) }
-            { 
-                (children.length > (limit as number)) ? 
-                    <a onClick={() => setExpanded(!expanded)}>
-                        ({expanded ? 'less' : 'more'})
-                    </a> 
-                : ''
+            { children.length > (limit as number) && 
+                <a onClick={() => setExpanded(!expanded)}>
+                    ({expanded ? 'less' : 'more'})
+                </a> 
             }
         </div>
     )

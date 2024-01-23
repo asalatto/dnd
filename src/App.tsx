@@ -43,6 +43,10 @@ export default function App() {
         }
     }
 
+    const showCopyUI = (): void => {
+        console.log('copy')
+    }
+
     // Updates field in character state
     const updateCharacter = (event: any): void => {
         const character_copy = JSON.parse(JSON.stringify(character));
@@ -151,8 +155,8 @@ export default function App() {
 
                 <div className="flex space-between">
                     <div className="flex">
-                        <h1 style={{display: 'inline-block'}}>Character{character.character_name ? `: ${character.character_name}` : ''}</h1>
-                        <button className="clear-button" onClick={() => clear()}>Clear</button>
+                        <h1 style={{display: 'inline-block'}}>Character{character.character_name && `: ${character.character_name}`}</h1>
+                        <button className="heading-button" onClick={() => clear()}>Clear</button>
                     </div>
                     <div>
                         <label htmlFor="theme">Theme: </label>
@@ -215,7 +219,7 @@ export default function App() {
 
                 <div className="flex section-heading">
                     <h2 style={{display: 'inline-block'}}>Equipment &amp; Inventory</h2>
-                    <button className="clear-button" onClick={() => clear('equipment')}>Clear</button>
+                    <button className="heading-button" onClick={() => clear('equipment')}>Clear</button>
                 </div>
                 <section className="sheet-section flex space-around">
                     <div>Currency:</div>
@@ -260,7 +264,7 @@ export default function App() {
 
                 <div className="flex section-heading">
                     <h2 style={{display: 'inline-block'}}>Spells &amp; Cantrips</h2>
-                    <button className="clear-button" onClick={() => clear('spells')}>Clear</button>
+                    <button className="heading-button" onClick={() => clear('spells')}>Clear</button>
                 </div>
                 <section className="sheet-section">
                     <div className="flex">
