@@ -58,7 +58,7 @@ export function getApiItemDescription(endpoint: string, data: any): string {
             val += `${data.category_range} weapon `;
             val += `(${data.damage.damage_dice} ${data.damage.damage_type.name} damage). `;
             if (data.range) {
-                val += `Range ${data.range.normal}${data.range.long && `/${data.range.long}`}. `;
+                val += `Range ${data.range.normal}${data.range.long ? `/${data.range.long}` : ''}. `;
             }
         } 
 
