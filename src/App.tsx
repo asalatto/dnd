@@ -33,10 +33,12 @@ export default function App() {
     });
 
     useEffect(() => {
+        setLocalData('current_character', currentCharacterName);
         if (window.localStorage.getItem('characters') != JSON.stringify(allCharacters)) {
             setLocalData('characters', allCharacters);
         }
         if (window.localStorage.getItem('current_character') && window.localStorage.getItem('characters')) {
+            console.log('switcheroo')
             const current_character = allCharacters.find(char => char.character_name === currentCharacterName);
             setCurrentCharacter(current_character as Character);
         }

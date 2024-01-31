@@ -55,8 +55,12 @@ export function getApiItemDescription(endpoint: string, data: any): string {
         val += `(Range: ${data.range}) ${description} ${data.higher_level ?? ''}`;
     } else if (endpoint.includes('equipment')) {
         if (data.equipment_category.index === 'weapon') {
-            val += `${data.category_range} weapon `;
-            val += `(${data.damage.damage_dice} ${data.damage.damage_type.name} damage). `;
+            if (data.category_range) {
+                val += `${data.category_range} weapon `;
+            }
+            if (data.damage) {
+                val += `(${data.damage.damage_dice} ${data.damage.damage_type.name} damage). `;
+            }
             if (data.range) {
                 val += `Range ${data.range.normal}${data.range.long ? `/${data.range.long}` : ''}. `;
             }
