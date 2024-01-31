@@ -15,7 +15,8 @@ export default function NewCharForm({
         const characters_list = getLocalData('characters', []);
         characters_list.push(legacy_character);
         setLocalData('characters', characters_list);
-
+        
+        window.localStorage.removeItem('character');
         window.location.reload();
     }
 
