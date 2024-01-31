@@ -1,40 +1,10 @@
-.page-wrapper, .main-footer {
-    padding: 50px 0;
-    background-color: #666; /* 😈 */
-}
-
 .page-wrapper {
+    min-height: 100vh;
     a {
         text-decoration: none;
         &:hover {
             text-decoration: underline;
         }
-    }
-}
-
-.page {
-    margin: auto;
-    max-width: 85%;
-    min-width: 800px;
-    color: #efefef;
-    svg {
-        fill: #efefef;
-    }
-    .svg-as-img {
-        filter: invert(99%) sepia(3%) saturate(384%) hue-rotate(237deg) brightness(112%) contrast(87%);
-    }
-}
-
-.sheet-section {
-    padding: 1em;
-    border-radius: 15px;
-    background-color: rgba(255, 255, 255, 0.85);
-    color: #444;
-    a {
-        color: dodgerblue;
-    }
-    svg {
-        fill: #444;
     }
 }
 
@@ -81,7 +51,7 @@
     border: 1px solid dodgerblue;
     font-size: 0.8rem;
     color: dodgerblue;
-    background-color: transparent;
+    background-color: #fff;
     cursor: pointer;
     line-height: 1;
     &:hover {
@@ -167,16 +137,77 @@
 }
 
 .main-footer {
+    padding: 2% 8%;
     text-align: center;
     font-size: 80%;
-    color: rgba(255,255,255,0.5);
     a {
         opacity: 0.75;
         font-weight: bold;
     }
 }
 
+.main-header {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    padding: 4px;
+    background-color: rgba(#fff, 0.65);
+    text-align: center;
+}
+
 .section-heading {
     margin-top: 1.75em;
     text-shadow: 1px 1px 1px rgba(#000, 0.2);
+}
+
+.switcher {
+    display: inline-block;
+    position: relative;
+    margin: auto;
+    &:not(.showing) .switcher-menu {
+        display: none;
+    }
+}
+
+.switcher-menu {
+    list-style: none;
+    display: block;
+    position: absolute;
+    max-height: 200px;
+    width: 250px;
+    margin: 0;
+    padding: 0;
+    overflow-y: auto;
+    border-radius: 4px;
+    background-color: #fff;
+    box-shadow: 0 0 3px rgba(#000, 0.25);
+    text-align: left;
+    li {
+        &:not(:last-child) {
+            border-bottom: 1px solid #eee;
+        }
+        a:not(.red) {
+            display: block;
+            padding: 8px 14px;
+            color: #444;
+            &:hover {
+                background-color: dodgerblue;
+                color: #fff;
+                text-decoration: none;
+            }
+        }
+        a.red {
+            float: right;
+            margin: 7px;
+            padding: 4px;
+        }
+    }
+}
+
+#create-new-character-button {
+    color: dodgerblue;
+    text-align: center;
+    &:hover {
+        color: #fff;
+    }
 }

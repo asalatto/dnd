@@ -1,0 +1,10 @@
+.new-character-form {
+    width: 500px;
+    margin: auto;
+    padding: 1em;
+    background-color: #fff;
+    > * {
+        display: block;
+        margin: 0.5em auto;
+    }
+}

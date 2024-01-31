@@ -1,5 +1,4 @@
 import "./index.scss";
-import { ChangeEvent } from "react";
 import { Input, Tooltip } from "../Utils";
 import {
     titleize, 
@@ -11,25 +10,27 @@ import {
 
 
 interface AbilityProps {
+    character_name: string;
     name?: string;
     value?: number|string;
     skills?: any[];
     proficiencies?: any[];
     saving_throws?: any[];
     level?: number;
-    updateCharacter?: (event: any) => void;
-    updateList?: (event: ChangeEvent, key: string) => void;
+    updateCharacterFunction?: Function;
+    updateListFunction?: Function;
 }
 
 export default function Ability({
+    character_name,
     name="",
     value=0,
     skills=[],
     proficiencies=[],
     saving_throws=[],
     level=1,
-    updateCharacter,
-    updateList,
+    updateCharacterFunction,
+    updateListFunction,
 }: AbilityProps) {
     
     const modifier = calculateModifier(value as number);
@@ -40,13 +41,13 @@ export default function Ability({
     return (
         <div className="ability">
             <div className="ability-block">
-                <Input name={name} label={titleize(name)} value={value} onChange={updateCharacter} />
+                <Input name={name} label={titleize(name)} value={value} onChange={(event) => updateCharacterFunction(character_name, event)} />
                 <div className="modifier" data-mod={modifier_display ?? 0}>{modifier_display}</div>
                 <label className="saving-throw">
                     <input 
                         type="checkbox"
                         value={name}
-                        onChange={(event) => updateList(event, 'saving_throws')}
+                        onChange={(event) => updateListFunction(character_name, event, 'saving_throws')}
                         checked={saving_throws.includes(name)}
                     /> 
                     saving throw {saving_throw_display}
@@ -64,7 +65,7 @@ export default function Ability({
                                 type="checkbox"
                                 id={skill}
                                 value={skill}
-                                onChange={(event) => updateList(event, 'skill_proficiencies')}
+                                onChange={(event) => updateListFunction(character_name, event, 'skill_proficiencies')}
                                 checked={proficiencies.includes(skill)}
                             /> 
                             <label htmlFor={skill}>

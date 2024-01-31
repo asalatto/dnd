@@ -5,17 +5,19 @@ import { titleize } from '../../utils';
 
 
 interface ItemListProps {
+    character_name: string;
     item_type: "spells"|"equipment";
     item_category: string|number;
     items: any[];
-    editItem: (item_name: string, key: string, action: 'edit'|'remove', new_item?: object) => void;
+    editItemFunction: Function;
 }
 
 export default function ItemList({
+    character_name,
     item_type,
     item_category,
     items,
-    editItem,
+    editItemFunction,
 }: ItemListProps) {
 
     const [itemboxes, setItemboxes] = useState(items);
@@ -52,7 +54,7 @@ export default function ItemList({
             new_item[field.name] = field.value;
         })
 
-        editItem(item_name, item_type, 'edit', new_item);
+        editItemFunction(character_name, item_name, item_type, 'edit', new_item);
     }
 
     return (
@@ -68,7 +70,7 @@ export default function ItemList({
                                         <input name="name" className="form-field" type="text" placeholder="Name" defaultValue={item.name} />
                                         <span>
                                             <button type="submit" className="button">save</button>
-                                            <a className="button red" onClick={() => editItem(item.name, item_type, 'remove')}>remove</a>
+                                            <a className="button red" onClick={() => editItemFunction(character_name, item.name, item_type, 'remove')}>remove</a>
                                         </span>
                                     </div>
                                     {item.quantity && 
@@ -88,7 +90,7 @@ export default function ItemList({
                                         </span>
                                         <span>
                                             <a className="button" onClick={() => switchMode(item.name)}>edit</a>
-                                            <a className="button red" onClick={() => editItem(item.name, item_type, 'remove')}>remove</a>
+                                            <a className="button red" onClick={() => editItemFunction(character_name, item.name, item_type, 'remove')}>remove</a>
                                         </span>
                                     </div>
                                     <ExpandBox style={{fontSize: '90%'}}>{item.description}</ExpandBox>

@@ -1,3 +1,6 @@
+import { Character, blank_character } from "./data";
+
+
 /* Functions */
 
 // Returns a string in title-case
@@ -14,6 +17,30 @@ export function getLocalData(key: string, defaultData: any): any {
     return defaultData;
 }
 
+// Sets browser's local storage by key
+export function setLocalData(key: string, localData: any): void {
+    if (typeof localData === 'string') {
+        window.localStorage.setItem(key, localData);
+    } else {
+        window.localStorage.setItem(key, JSON.stringify(localData));
+    }
+}
+
+// Get current character's name from browser's local storage
+export function getCurrentCharacterName() {
+    const characters = window.localStorage.getItem('characters') ? JSON.parse(window.localStorage.getItem('characters')) : [];
+    const current = window.localStorage.getItem('current_character');
+    const character_exists = characters.findIndex(char => char.character_name === current) > -1;
+    
+    if (current && character_exists) {
+        return current;
+    } else if (characters.length > 0) {
+        return characters[0].character_name;
+    } else {
+        return '';
+    }
+}
+
 // Gets data from DnD 5e API endpoint
 export async function getApiData(endpoint: string) {
     return fetch(`https://www.dnd5eapi.co/api/${endpoint}`).then((response) => response.json())
@@ -21,7 +48,6 @@ export async function getApiData(endpoint: string) {
 
 // Parses the DnD 5e API's response description based on request type 
 export function getApiItemDescription(endpoint: string, data: any): string {
-    console.log(endpoint)
     let val = '';
     const description = data.desc.join(" — ");
 
@@ -149,4 +175,85 @@ export async function addItemFromApi(event: any, url: string): Promise<any> {
 
         form.querySelector(`[name="${field.name}"]`).value = val;
     })
+}
+
+
+/* Character Management Functions */
+
+// Clears character details or field on character
+export function clearCharacter(character: Character, category?: string): Character {
+    if (category) {
+        character[category] = [];
+        return character;
+    } else {
+        const reset_character = blank_character;
+
+        reset_character.character_name = character.character_name;
+        return reset_character;
+    }
+}
+
+// Updates field on character
+export function updateCharacter(character: Character, event: any): Character {
+    const field = event.target.id;
+    const value = event.target.value || event.target.innerText.trim();
+    character[field] = value;
+    return character;
+}
+
+// Updates currency array on character
+export function updateCharacterCurrency(character: Character, event: any): Character {
+    const this_currency = character.currency.find(cur => cur.name === event.target.name);
+    this_currency['amount'] = event.target.value; 
+    return character;
+}
+
+// Updates checkbox-selected proficiencies on character
+export function updateCharacterCheckboxList(character: Character, event: React.ChangeEvent, key: string): Character {
+    const current_list = character[key];
+    const element = event.target as HTMLInputElement;
+    const value = element.value;
+
+    if (element.checked && !current_list.includes(value)) {
+        current_list.push(value);
+    } else if (!element.checked && current_list.includes(value)) {
+        current_list.splice(current_list.indexOf(value), 1);
+    }
+
+    return character;
+}
+
+// Saves new item (spell or equipment) to character
+export function saveCharacterItem(character: Character, fields: any, key: string): Character {
+    const new_item = {
+        'editing': false
+    };
+
+    fields.forEach(field => {
+        if (field.name === 'item_name') {
+            new_item['name'] = field.value;
+        } else {
+            new_item[field.name] = field.value;
+        }
+    })
+
+    character[key] = [...character[key], ...[new_item]];
+    return character;
+}
+
+// Edits item (spell or equipment) on character
+export function editCharacterItem(character: Character, item_name: string, key: string, action: 'edit'|'remove', new_item?: object): Character {
+    const list = character[key];
+    const item_index = list.findIndex(item => item.name === item_name);
+
+    if (action === 'remove') {
+        list.splice(item_index, 1);
+        character[key] = list;
+    } else {
+        for (const [field, value] of Object.entries(new_item)) {
+            list[item_index][field] = value;
+        }
+    }
+
+    return character;
 }
