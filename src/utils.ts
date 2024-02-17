@@ -261,3 +261,15 @@ export function editCharacterItem(character: Character, item_name: string, key: 
 
     return character;
 }
+
+// Calculates "grade" color based on HP percentage for HP bar
+export function getHealthGrade(current, maximum) {
+    const percent = Math.floor((100 * current) / maximum);
+    if (percent > 70) {
+        return 'good';
+    } else if (percent <= 25) {
+        return 'poor';
+    } else {
+        return 'fair';
+    }
+}

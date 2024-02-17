@@ -63,3 +63,32 @@
         display: none;
     }
 }
+
+.health-bar {
+    height: 11px;
+    width: 100%;
+}
+
+.health-bar[value] {
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+.health-bar[value]::-webkit-progress-bar {
+    background-color: #eee;
+    border: 1px solid #eee;
+    border-radius: 15px;
+}
+
+.health-bar[value]::-webkit-progress-value {
+    border-radius: 15px;
+}
+.health-bar.good[value]::-webkit-progress-value {
+    background-color: #05AC3A;
+}
+.health-bar.fair[value]::-webkit-progress-value {
+    background-color: #ECB900;
+}
+.health-bar.poor[value]::-webkit-progress-value {
+    background-color: #D82D2D;
+}

@@ -155,6 +155,10 @@ export default function App() {
             const error_box = form.querySelector('.error') as HTMLElement;
             const item_name = form.item_name.value.trim();
 
+            if (this_character[key] === undefined) {
+                this_character[key] = [];
+            }
+
             if (error_box) {
                 if (!item_name) {
                     error_box.innerText = 'Enter name.';

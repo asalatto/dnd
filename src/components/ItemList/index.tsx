@@ -6,8 +6,8 @@ import { titleize } from '../../utils';
 
 interface ItemListProps {
     character_name: string;
-    item_type: "spells"|"equipment";
-    item_category: string|number;
+    item_type: "spells"|"equipment"|"features";
+    item_category?: string|number;
     items: any[];
     editItemFunction: Function;
 }
@@ -27,10 +27,12 @@ export default function ItemList({
     }, [items])
 
     let title: string;
-    if (item_type === 'spells') {
-        title = item_category == 0 ? 'Cantrips' : `Level ${item_category} Spells`;
-    } else {
-        title = titleize(item_category as string);
+    if (item_category) {
+        if (item_type === 'spells') {
+            title = item_category == 0 ? 'Cantrips' : `Level ${item_category} Spells`;
+        } else {
+            title = titleize(item_category as string);
+        }
     }
 
     const switchMode = (item_name: string): void => {
@@ -59,9 +61,9 @@ export default function ItemList({
 
     return (
         <div className="item-list">
-            <h4>{title}</h4>
+            {title && <h4>{title}</h4>}
             <ul>
-                { itemboxes.map(item => {
+                { itemboxes?.map(item => {
                     return (
                         <li key={item.name} className="sheet-section" data-spell-name={item.name}>
                             {(item.editing) ?

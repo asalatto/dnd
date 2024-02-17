@@ -37,12 +37,13 @@ export function Input({
     layout="",
     tooltip,
     input_classes="",
+    label,
     ...props
 }: InputProps) {
     return (
         <div className={`util-text-input ${layout}`}>
             <label htmlFor={name}>
-                {titleize(name)}
+                {label ?? titleize(name)}
                 {tooltip && <Tooltip>{tooltip}</Tooltip>}
             </label>
             <input type={type} className={input_classes} id={name} name={name} autoComplete="off" {...props} />

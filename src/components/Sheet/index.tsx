@@ -8,7 +8,8 @@ import {
     calculateModifier, 
     getModifierDisplay, 
     getProficiencyBonus, 
-    addItemFromApi
+    addItemFromApi,
+    getHealthGrade,
 } from '../../utils';
 
 
@@ -37,7 +38,7 @@ export default function Sheet({
     const proficiency_bonus = getProficiencyBonus(character.level);
     const spell_save_dc = (8 + calculateModifier(character[character.spellcasting_ability]) + proficiency_bonus);
     const spell_attack_bonus = (getModifierDisplay(calculateModifier(character[character.spellcasting_ability]) + proficiency_bonus));
-
+    const health_percentage = getHealthGrade(character.hit_point_current, character.hit_point_maximum);
 
     return (
         <div className="character-sheet" style={{ backgroundColor: character.theme }}>
@@ -53,19 +54,33 @@ export default function Sheet({
                         <span className="form-hint" style={{textAlign: 'right'}}>Hint: enter <a href="https://www.w3.org/wiki/CSS/Properties/color/keywords" target="_blank" style={{ color: 'pink' }}><strong>valid CSS color value</strong></a>. Or "pink"</span>
                     </div>
                 </div>
-                <section className="sheet-section">
-                    <Input layout="small" onChange={(event) => updateFunction(character.character_name, event)} name="class" value={character.class} />
-                    <Input layout="small" onChange={(event) => updateFunction(character.character_name, event)} name="race" value={character.race} />
-                    <Input layout="small" onChange={(event) => updateFunction(character.character_name, event)} name="background" value={character.background} />
-                    <Input layout="small" onChange={(event) => updateFunction(character.character_name, event)} name="level" type="number" value={character.level} />
-                    <Input layout="small" onChange={(event) => updateFunction(character.character_name, event)} name="experience_points" type="number" value={character.experience_points} />
-                    <Input layout="small" onChange={(event) => updateFunction(character.character_name, event)} name="alignment" value={character.alignment} />
-                    <Input layout="small" onChange={(event) => updateFunction(character.character_name, event)} name="hit_dice" value={character.hit_dice} />
-                    <Input layout="small" onChange={(event) => updateFunction(character.character_name, event)} name="hit_dice_total" value={character.hit_dice_total} />
-                    <Input layout="small" onChange={(event) => updateFunction(character.character_name, event)} name="armor_class" value={character.armor_class} tooltip="Base is 10 + dexterity modifier" />
-                    <Input layout="small" onChange={(event) => updateFunction(character.character_name, event)} name="hit_point_maximum" type="number" min={0} value={character.hit_point_maximum} />
-                    <Input layout="small" onChange={(event) => updateFunction(character.character_name, event)} name="speed" value={character.speed} />
-                </section>
+
+                <div className="flex">
+                    <section style={{ paddingRight: '1.5em' }}>
+                        <h3 style={{ margin: 0 }}>Hit Points</h3>
+                        <div className="flex">
+                            <Input layout="small" onChange={(event) => updateFunction(character.character_name, event)} name="hit_point_current" label="Current" type="number" value={character.hit_point_current} />
+                            <Input layout="small" onChange={(event) => updateFunction(character.character_name, event)} name="hit_point_maximum" label="Maximum" type="number" min={0} value={character.hit_point_maximum} />
+                        </div>
+                        <progress 
+                            className={`health-bar ${health_percentage}`}
+                            value={character.hit_point_current}
+                            max={character.hit_point_maximum}
+                        >{character.hit_point_current}HP</progress>
+                    </section>
+                    <section className="sheet-section">
+                        <Input layout="small" onChange={(event) => updateFunction(character.character_name, event)} name="class" value={character.class} />
+                        <Input layout="small" onChange={(event) => updateFunction(character.character_name, event)} name="race" value={character.race} />
+                        <Input layout="small" onChange={(event) => updateFunction(character.character_name, event)} name="background" value={character.background} />
+                        <Input layout="small" onChange={(event) => updateFunction(character.character_name, event)} name="level" type="number" value={character.level} />
+                        <Input layout="small" onChange={(event) => updateFunction(character.character_name, event)} name="experience_points" type="number" value={character.experience_points} />
+                        <Input layout="small" onChange={(event) => updateFunction(character.character_name, event)} name="alignment" value={character.alignment} />
+                        <Input layout="small" onChange={(event) => updateFunction(character.character_name, event)} name="hit_dice" value={character.hit_dice} />
+                        <Input layout="small" onChange={(event) => updateFunction(character.character_name, event)} name="hit_dice_total" value={character.hit_dice_total} />
+                        <Input layout="small" onChange={(event) => updateFunction(character.character_name, event)} name="armor_class" value={character.armor_class} tooltip="Base is 10 + dexterity modifier" />
+                        <Input layout="small" onChange={(event) => updateFunction(character.character_name, event)} name="speed" value={character.speed} />
+                    </section>
+                </div>
 
                 <div className="flex space-between">
                     <h2 className="section-heading">Abilities &amp; Skills <small>Modifiers appear when you enter ability scores. Check off proficiencies.</small></h2>
@@ -101,6 +116,25 @@ export default function Sheet({
                         })
                     }
                 </section>
+
+                <div className="flex section-heading">
+                    <h2 style={{display: 'inline-block'}}>Features &amp; Traits</h2>
+                    <button className="heading-button" onClick={() => clearFunction(character.character_name, 'features')}>Clear</button>
+                </div>
+                <form className="new-item-form" onSubmit={(event) => saveItemFunction(character.character_name, event, 'features')} style={{ marginTop: 0 }}>
+                    <label>Add Feature/Trait: </label>
+                    <Search name="item_name" endpoint={['features', 'traits']} updateFunction={addItemFromApi} placeholder="Feature name" />
+                    <textarea className="form-field" name="description" rows={1} cols={40} placeholder="Feature or trait details" style={{ margin: '4px 14px' }}></textarea>
+                    <input type="submit" value="Save" />
+                    <div className="error"></div>
+                </form>
+                <div className="item-list-container single-category">
+                    <ItemList 
+                        character_name={character.character_name}
+                        item_type="features"
+                        items={character.features}
+                        editItemFunction={editItemFunction} />
+                </div>
 
                 <div className="flex section-heading">
                     <h2 style={{display: 'inline-block'}}>Equipment &amp; Inventory</h2>

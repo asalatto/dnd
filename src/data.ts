@@ -13,6 +13,12 @@ interface Equipment {
     editing:        boolean;
 }
 
+interface Feature {
+    name:           string;
+    description:    string;
+    editing:        boolean;
+}
+
 interface Currency {
     name:   string;
     label:  string;
@@ -46,6 +52,7 @@ export interface Character {
     spellcasting_ability:   "charisma"|"intelligence"|"wisdom"|"";
     spells:                 Spell[];
     equipment:              Equipment[];
+    features:               Feature[];
     currency:               Currency[];
 }
 
@@ -78,6 +85,7 @@ export const blank_character: Character = {
     "spellcasting_ability": "",
     "spells":               [],
     "equipment":            [],
+    "features":             [],
     "currency": [
         {"name": "copper", "label": "CP", "amount": ""},
         {"name": "silver", "label": "SP", "amount": ""},
